@@ -7,8 +7,8 @@ namespace webapi.Models
     {
         [NotMapped]
         public List<string>? FavouriteStyles { get; set; }
-        public int BudgetMin { get; set; }
-        public int BudgetMax { get; set; }
+        public int? BudgetMin { get; set; }
+        public int? BudgetMax { get; set; }
         public string? Picture { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DateTime DateJoined { get; set; }

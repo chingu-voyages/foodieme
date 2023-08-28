@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using webapi.Constants;
 
 namespace webapi.Models
 {
