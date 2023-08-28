@@ -1,28 +1,28 @@
-# voyage-tasks
+# FoodieMe
+*a Chingdo v45-tier3-50 project* 
 
-Your project's `readme` is as important to success as your code. For 
-this reason you should put as much care into its creation and maintenance
-as you would any other component of the application.
+An app with a React frontend and an ASP.NET Core Web API backend
 
-If you are unsure of what should go into the `readme` let this article,
-written by an experienced Chingu, be your starting point - 
-[Keys to a well written README](https://tinyurl.com/yk3wubft).
+## React App
+located in the `./reactapp` folder
 
-And before we go there's "one more thing"! Once you decide what to include
-in your `readme` feel free to replace the text we've provided here.
+from this location, you can run
 
-> Own it & Make it your Own!
+```bash
+npm install #install dependencies
+npm run start #run application once dependices are installed
+```
 
-## Team Documents
+## ASP.NET Core Web Api
+located in the `./webapi` folder
 
-You may find these helpful as you work together to organize your project.
+from this location, you can run
 
-- [Team Project Ideas](./docs/team_project_ideas.md)
-- [Team Decision Log](./docs/team_decision_log.md)
+```bash
+dotnet watch
+```
 
-Meeting Agenda templates (located in the `/docs` directory in this repo):
+to run the server and the SwaggerAPI related to it.
 
-- Meeting - Voyage Kickoff --> ./docs/meeting-voyage_kickoff.docx
-- Meeting - App Vision & Feature Planning --> ./docs/meeting-vision_and_feature_planning.docx
-- Meeting - Sprint Retrospective, Review, and Planning --> ./docs/meeting-sprint_retrospective_review_and_planning.docx
-- Meeting - Sprint Open Topic Session --> ./docs/meeting-sprint_open_topic_session.docx
+## Running the whole project with Visual Studio
+At the root of the project, you may be able to launch both at once pressing "Start"
