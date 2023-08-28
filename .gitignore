@@ -39,7 +39,7 @@ logs/
 /webapi/obj
 /webapi/.gitignore
 /webapi/appsettings.json
-/webapi/appsettings.example.Development.json
+/webapi/appsettings.Development.json
 
 # User-specific files
 *.rsuser

@@ -4,7 +4,7 @@
 An app with a React frontend and an ASP.NET Core Web API backend
 
 ## React App
-located in the `./reactapp` folder
+Located in the `./reactapp` folder
 
 from this location, you can run
 
@@ -14,7 +14,10 @@ npm run start #run application once dependices are installed
 ```
 
 ## ASP.NET Core Web Api
-located in the `./webapi` folder
+Located in the `./webapi` folder
+
+You are provided with a `appsettings.example.json`. you would need to create a `appsettings.json` from it, with the proper Connection String in order to communicate with the DB.
+
 
 from this location, you can run
 
