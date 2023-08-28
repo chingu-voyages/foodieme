@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using webapi.Data.Seeds;
 using webapi.Models;
 
 namespace webapi.Data
@@ -17,6 +18,8 @@ namespace webapi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new UserSeedConfiguration());
+            modelBuilder.ApplyConfiguration(new RestaurantSeedConfiguration());
 
             modelBuilder.Entity<RestaurantModel>()
                 .HasOne(r => r.Creator)
@@ -32,6 +35,19 @@ namespace webapi.Data
                 .HasMany(m => m.Companions)
                 .WithMany()
                 .UsingEntity("MealRequestsCompanions");
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var entry in base.ChangeTracker.Entries<BaseEntity>().Where(q => q.State == EntityState.Added || q.State == EntityState.Modified))
+            {
+                entry.Entity.DateUpdated = DateTime.Now;
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.DateCreated = DateTime.Now;
+                }
+            }
+            return base.SaveChangesAsync(cancellationToken);
         }
     }
 }
