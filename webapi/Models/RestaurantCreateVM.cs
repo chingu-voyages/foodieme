@@ -1,0 +1,12 @@
+﻿namespace webapi.Models
+{
+    public class RestaurantCreateVM
+    {
+        public string CreatorId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Budget { get; set; }
+        public string Style { get; set; }
+        public string Address { get; set; }
+    }
+}

@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
 using webapi.Data;
+using webapi.Data.Configurations;
+using webapi.Interfaces;
+using webapi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +33,10 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore).AddNewtonsoftJson(
     options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
+builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericServices<>));
+builder.Services.AddScoped<IRestaurantService, RestaurantServices>();
+
+builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 var app = builder.Build();
 
