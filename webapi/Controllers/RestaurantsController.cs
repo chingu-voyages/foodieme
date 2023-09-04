@@ -65,18 +65,21 @@ namespace webapi.Controllers
         // PUT: api/Restaurants/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRestaurantModel(int id, RestaurantModel restaurantModel)
+        public async Task<IActionResult> EditRestaurant(int id, RestaurantVM restaurantModel)
         {
             if (id != restaurantModel.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(restaurantModel).State = EntityState.Modified;
+            //_context.Entry(restaurantModel).State = EntityState.Modified;
+            //var restaurant = 
 
             try
             {
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync();
+                var updatedRestaurant = await restaurantServices.EditRestaurant(restaurantModel);
+                return CreatedAtAction(nameof(GetRestaurant), new { id = updatedRestaurant.Id }, updatedRestaurant);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -89,8 +92,7 @@ namespace webapi.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
+            //return NoContent();
         }
 
         // POST: api/Restaurants
@@ -117,14 +119,6 @@ namespace webapi.Controllers
             {
                 return NotFound();
             }
-            //var restaurantModel = await _context.Restaurants.FindAsync(id);
-            //if (restaurantModel == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //_context.Restaurants.Remove(restaurantModel);
-            //await _context.SaveChangesAsync();
             var isDelete = await restaurantServices.DeleteRestaurant(id);
             if (!isDelete) return NotFound();
             return NoContent();

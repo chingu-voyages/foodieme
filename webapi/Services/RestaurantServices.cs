@@ -58,18 +58,18 @@ namespace webapi.Services
 
         public async Task<bool> DeleteRestaurant(int id)
         {
-            //var restaurantModel = await _context.Restaurants.FindAsync(id);
-            //if (restaurantModel == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //_context.Restaurants.Remove(restaurantModel);
-            //await _context.SaveChangesAsync();
-            
+          
             var isDelete = await DeleteAsync(id);
             if (isDelete == false) return false;
             return true;
+        }
+
+        public async Task<RestaurantVM> EditRestaurant(RestaurantVM model)
+        {
+            var restaurantModel = mapper.Map<RestaurantModel>(model);
+            await UpdateAsync(restaurantModel);
+            return mapper.Map<RestaurantVM>(restaurantModel);
+
         }
     }
 }
