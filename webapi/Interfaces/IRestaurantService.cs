@@ -7,5 +7,8 @@ namespace webapi.Interfaces
         Task<List<RestaurantVM>> GetAllRestaurantsWithCreator();
         Task<List<RestaurantVM>> GetAllRestaurants();
         Task<RestaurantVM> GetRestaurant(int id);
+        Task<RestaurantVM> CreateRestaurant(RestaurantCreateVM model);
+        Task<bool> DeleteRestaurant(int id);
+
     }
 }

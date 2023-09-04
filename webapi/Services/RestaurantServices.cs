@@ -47,5 +47,29 @@ namespace webapi.Services
             return restaurantVM;
         }
 
+        public async Task<RestaurantVM> CreateRestaurant(RestaurantCreateVM model)
+        {
+            //Check if model is properly built
+            var restaurantModel = mapper.Map<RestaurantModel>(model);
+            var newRestaurant = await AddAsync(restaurantModel);
+            var newRestaurantVM = mapper.Map<RestaurantVM>(newRestaurant);
+            return newRestaurantVM;
+        }
+
+        public async Task<bool> DeleteRestaurant(int id)
+        {
+            //var restaurantModel = await _context.Restaurants.FindAsync(id);
+            //if (restaurantModel == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //_context.Restaurants.Remove(restaurantModel);
+            //await _context.SaveChangesAsync();
+            
+            var isDelete = await DeleteAsync(id);
+            if (isDelete == false) return false;
+            return true;
+        }
     }
 }

@@ -7,7 +7,8 @@ namespace webapi.Data.Configurations
     {
         public MapperConfig()
         {
-            //CreateMap<RestaurantModel, RestaurantVM>().ReverseMap();
+            CreateMap<RestaurantModel, RestaurantVM>().ReverseMap();
+            CreateMap<RestaurantCreateVM, RestaurantModel>().ReverseMap();
             CreateMap<UserModel, UserVM>().ReverseMap();
             CreateMap<UserModel, CreatorVM>().ReverseMap();
             CreateMap<RestaurantModel, RestaurantVM>()
