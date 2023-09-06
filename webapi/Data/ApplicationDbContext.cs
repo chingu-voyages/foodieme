@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using webapi.Data.Seeds;
 using webapi.Models;
 
@@ -8,9 +9,7 @@ namespace webapi.Data
     {
         public ApplicationDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
         {
-
         }
-
         public DbSet<UserModel> Users { get; set; }
         public DbSet<MealRequestModel> MealRequests { get; set; }
         public DbSet<RestaurantModel> Restaurants { get; set; }

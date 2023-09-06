@@ -28,7 +28,7 @@ namespace webapi.Services
             return restaurantVM;
         }
 
-        public async Task<RestaurantVM> GetRestaurant(int id)
+        public async Task<RestaurantVM?> GetRestaurant(int id)
         {
              if (context.Restaurants == null)
           {

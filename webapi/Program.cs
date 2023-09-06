@@ -5,6 +5,7 @@ using webapi.Data;
 using webapi.Data.Configurations;
 using webapi.Interfaces;
 using webapi.Services;
+using webapi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDefaultIdentity<UserModel>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
 var supabaseUrl = builder.Configuration["Supabase:URL"];
 

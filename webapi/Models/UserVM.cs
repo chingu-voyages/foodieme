@@ -1,10 +1,13 @@
-﻿namespace webapi.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace webapi.Models
 {
     public class UserVM
     {
         public int Id { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
+        [NotMapped]
         public List<string>? FavouriteStyles { get; set; }
         public int? BudgetMin { get; set; }
         public int? BudgetMax { get; set; }
