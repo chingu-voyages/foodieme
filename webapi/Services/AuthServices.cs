@@ -14,15 +14,20 @@ using webapi.Models;
 
 namespace webapi.Services
 {
-    public class AuthServices: GenericServices<UserModel>, IAuthService
+    public class AuthServices : GenericServices<UserModel>, IAuthService
     {
         private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _context;
+        private readonly SignInManager<UserModel> signInManager;
 
-        public AuthServices(IConfiguration configuration, ApplicationDbContext context): base(context)
+        public AuthServices(IConfiguration configuration,
+            ApplicationDbContext context,
+             SignInManager<UserModel> signInManager
+            ) : base(context)
         {
             this._configuration = configuration;
             this._context = context;
+            this.signInManager = signInManager;
         }
 
 
@@ -57,7 +62,7 @@ namespace webapi.Services
             return jwt;
         }
 
-        public async Task<string> LoginUser(UserLoginModel model)
+        public async Task<LoginResponse> LoginUser(UserLoginModel model)
         {
             string email = model.email;
             string password = model.password;
@@ -66,7 +71,7 @@ namespace webapi.Services
             Console.WriteLine($"Login {email}");
             Console.WriteLine($"Password {password}");
             var user = await _context.Users.FirstOrDefaultAsync(user => email == user.Email);
-            if ( user == null )
+            if (user == null)
             {
                 return null;
             }
@@ -77,7 +82,7 @@ namespace webapi.Services
             }
             string token = CreateToken(user);
 
-            return token;
+            return new LoginResponse { token= token, user = user};
         }
 
         public string LogoutUser()
@@ -129,7 +134,7 @@ namespace webapi.Services
                 //DateOfBirth = (DateTime)(model.DateOfBirth.HasValue ? model.DateOfBirth.Value : (DateTime?)null)
             };
 
-        
+
             if (model.DateOfBirth.HasValue)
             {
                 userModel.DateOfBirth = model.DateOfBirth.Value;

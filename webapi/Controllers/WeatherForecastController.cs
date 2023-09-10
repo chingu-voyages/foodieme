@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace webapi.Controllers;
@@ -18,7 +19,9 @@ public class WeatherForecastController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
+    // Authorize(Roles = "Rolename") also possible
+
+    [HttpGet(Name = "GetWeatherForecast"), Authorize(Roles ="Admin")]
     public IEnumerable<WeatherForecast> Get()
     {
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast

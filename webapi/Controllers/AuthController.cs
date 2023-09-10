@@ -49,15 +49,7 @@ namespace webapi.Controllers
             this._signInManager = signInManager;
             this._configuration = configuration;
             this.authServices = authServices;
-            //this.genericServices = genericSyervices;
-            //this.authServices = authServices;
         }
-
-        //public class UserLoginModel
-        //{
-        //    public string email { get; set; }
-        //    public string password { get; set; }
-        //}
 
         [HttpPost("register")]
         public async Task<ActionResult<UserModel>> Register([FromBody] UserRegister userRegister)
@@ -86,83 +78,42 @@ namespace webapi.Controllers
         public async Task<ActionResult<UserModel>> Login([FromBody] UserLoginModel model)
         {
 
-            string email = model.email;
-            string password = model.password;
-            System.Diagnostics.Debug.WriteLine($"Login {email}");
-            System.Diagnostics.Debug.WriteLine($"Password {password}");
-            Console.WriteLine($"Login {email}");
-            Console.WriteLine($"Password {password}");
-            var userExist = await _context.Users.FirstOrDefaultAsync(user => email == user.Email);
-            if (userExist == null || userExist.Email != email)
-            {
-                return BadRequest("Login Information does not match our records");
-            }
-            var hasher = new PasswordHasher<UserModel>();
-            if (PasswordVerificationResult.Failed == hasher.VerifyHashedPassword(userExist, userExist.PasswordHash, password))
-            {
-                return BadRequest("Login Information does not match our records");
+            //string email = model.email;
+            //string password = model.password;
+            //System.Diagnostics.Debug.WriteLine($"Login {email}");
+            //System.Diagnostics.Debug.WriteLine($"Password {password}");
+            //Console.WriteLine($"Login {email}");
+            //Console.WriteLine($"Password {password}");
+            //var userExist = await _context.Users.FirstOrDefaultAsync(user => email == user.Email);
 
-            }
+            //if (userExist == null || userExist.Email != email)
+            //{
+            //    return BadRequest("Login Information does not match our records");
+            //}
+            //var hasher = new PasswordHasher<UserModel>();
+            //if (PasswordVerificationResult.Failed == hasher.VerifyHashedPassword(userExist, userExist.PasswordHash, password))
+            //{
+            //    return BadRequest("Login Information does not match our records");
+
+            //}
             //var some = await _userManager.
             //var something = await _signInManager.PasswordSignInAsync(userExist.Email, model.password, false, false);
             //something.Succeeded
             //Send JWTToken
             //return CreatedAtAction("Registration", newUser);
             //return Ok(newUser);
-            string token = CreateToken(userExist);
+            //string token = CreateToken(user);
 
-            return Ok(token);
-
-        }
-
-        //[HttpPost]
-        //public Task<ActionResult> Logout()
-        //{
-        //    return Ok();
-        //}
-
-        private string CreateToken(UserModel userModel)
-        {
-            //var token = "";
-            Console.WriteLine($"userModel.Email {userModel.Email}");
-            //Console.WriteLine($"key {key}");
-            //Console.WriteLine($"key {key}");
-            List<Claim> claims = new()
+            var loginRes = await authServices.LoginUser(model);
+            if (loginRes.token == null)
             {
-                new Claim("name", userModel.UserName),
-                new Claim(ClaimTypes.Email, userModel.Email),
-                new Claim("email", userModel.Email),
-                new Claim("sub", userModel.Id),
-            };
-
-            // Key used to create the JWT and verify the JWT, whenever user's make a call.
-            //var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
-            foreach (var claim in claims)
-            {
-                Console.WriteLine($"claims {claim}");
-
+                return BadRequest("Login Information does not match our records");
             }
+            await _signInManager.SignInAsync(loginRes.user, isPersistent: false);
 
-            //Need a singin credentials
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            return Ok(loginRes.token);
 
-            var tokenOptions = new JwtSecurityToken(
-                issuer: _configuration["JWT:ValidIssuer"],
-                audience: _configuration["JWT:ValidAudience"],
-                claims: claims,
-                expires: DateTime.Now.AddHours(12),
-                //expires: DateTime.Now.AddDays(1),
-                signingCredentials: creds
-                );
-
-            //write token
-            var jwt = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            return jwt;
         }
-
-
 
 
         [HttpGet, Authorize]
@@ -195,6 +146,8 @@ namespace webapi.Controllers
         public IActionResult Logout()
         {
             var expiredToken = authServices.LogoutUser();
+
+            _signInManager.SignOutAsync();
 
             // You can optionally include any additional response data or messages.
             return Ok(new { message = "Logged out successfully", token = expiredToken });
