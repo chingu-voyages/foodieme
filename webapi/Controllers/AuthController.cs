@@ -12,13 +12,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using webapi.Data;
+using webapi.Interfaces;
 using webapi.Models;
 using webapi.Services;
 
 namespace webapi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -27,20 +28,20 @@ namespace webapi.Controllers
 
         //to access the appsettings.json
         private readonly IConfiguration _configuration;
-        private readonly AuthServices authServices;
+        private readonly IAuthService authServices;
 
         //private readonly GenericServices<UserModel> genericServices;
 
         //private readonly AuthServices authServices;
 
         //For testing purposes
-        public static UserModel newUserModel = new UserModel();
+        //public static UserModel newUserModel = new UserModel();
 
         public AuthController(ApplicationDbContext context,
             UserManager<UserModel> userManager,
             SignInManager<UserModel> signInManager,
             IConfiguration configuration,
-            AuthServices authServices
+            IAuthService authServices
             )
         {
             _context = context;
@@ -48,61 +49,35 @@ namespace webapi.Controllers
             this._signInManager = signInManager;
             this._configuration = configuration;
             this.authServices = authServices;
-            //this.genericServices = genericServices;
+            //this.genericServices = genericSyervices;
             //this.authServices = authServices;
         }
 
-        public class UserLoginModel
-        {
-            public string email { get; set; }
-            public string password { get; set; }
-        }
+        //public class UserLoginModel
+        //{
+        //    public string email { get; set; }
+        //    public string password { get; set; }
+        //}
 
         [HttpPost("register")]
-        public async Task<ActionResult<UserModel>> Register(UserRegister userRegister)
+        public async Task<ActionResult<UserModel>> Register([FromBody] UserRegister userRegister)
         {
+            Console.WriteLine("Model state: " + ModelState.IsValid);
+
+            // Log the model data
+            Console.WriteLine($"UserName: {userRegister.UserName}");
+            Console.WriteLine($"Email: {userRegister.Email}");
+
             if (!ModelState.IsValid)
             {
                 return BadRequest("Invalid form");
             }
 
             var newUser = await authServices.RegisterNewUser(userRegister);
-            //var userExist = await _context.Users.AnyAsync(user => userRegister.Email == user.Email);
-            //System.Diagnostics.Debug.WriteLine("result from context");
-            //System.Diagnostics.Debug.WriteLine(userExist);
-
-            //var result = await _userManager.FindByEmailAsync(userRegister.Email);
-            //System.Diagnostics.Debug.WriteLine("result from user manager");
-            //System.Diagnostics.Debug.WriteLine(result);
             if (newUser == null)
             {
                 return BadRequest("A user with this email address already exist");
             }
-
-            //var hasher = new PasswordHasher<UserModel>();
-            //var userModel = new UserModel
-            //{
-            //    PasswordHash = hasher.HashPassword(null, userRegister.Password),
-            //    FirstName = userRegister.FirstName,
-            //    LastName = userRegister.LastName,
-            //    Email = userRegister.Email,
-            //    UserName = userRegister.UserName,
-            //    DateJoined = DateTime.Now,
-            //    DateOfBirth = (DateTime)userRegister.DateOfBirth
-
-            //};
-
-            //await _context.Users.AddAsync(userModel);
-            //await _context.SaveChangesAsync();
-            //newUserModel.PasswordHash = hasher.HashPassword(null, userRegister.Password);
-            //newUserModel.FirstName = userRegister.FirstName;
-            //newUserModel.LastName = userRegister.LastName;
-            //newUserModel.Email = userRegister.Email;
-            //newUserModel.UserName = userRegister.UserName;
-            //newUserModel.DateJoined = DateTime.Now;
-            //newUserModel.DateOfBirth = (DateTime)userRegister.DateOfBirth;
-            //return CreatedAtAction("Registration"; newUser);
-            //return Ok(newUser);
             return Created("somewhere", newUser);
 
         }
@@ -188,6 +163,8 @@ namespace webapi.Controllers
         }
 
 
+
+
         [HttpGet, Authorize]
         public ActionResult<string> GetUserName()
         {
@@ -211,6 +188,16 @@ namespace webapi.Controllers
                 userEmail,
                 //userEmailClaim
             });
+        }
+
+        [HttpPost]
+        [Route("logout")]
+        public IActionResult Logout()
+        {
+            var expiredToken = authServices.LogoutUser();
+
+            // You can optionally include any additional response data or messages.
+            return Ok(new { message = "Logged out successfully", token = expiredToken });
         }
 
         //// GET: UserVMs

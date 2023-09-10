@@ -70,7 +70,7 @@ builder.Services.AddIdentity<UserModel, IdentityRole>(options =>
 options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
-    //.addjwt
+//.addjwt
 
 //Configure JWT authentication if needed
 // Add Authentication and JwtBearer middleware to add to Header
@@ -93,7 +93,7 @@ builder.Services
             ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
             ValidAudience = builder.Configuration["JWT:ValidAudience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
-           
+
         };
         options.SecurityTokenValidators.Clear();
         // Makes my custom claim "email" discoverable by protected routes, which is not the case without. It maps the ClaimTypes.Email to "email" key.
@@ -111,9 +111,15 @@ var supabaseUrl = builder.Configuration["Supabase:URL"];
 
 
 //JSON Serializer
-builder.Services.AddControllers().AddNewtonsoftJson(options =>
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore).AddNewtonsoftJson(
-    options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+    options => options.SerializerSettings.ContractResolver = new DefaultContractResolver())
+    .AddJsonOptions(options =>
+         {
+             options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+             options.JsonSerializerOptions.PropertyNamingPolicy = null;
+         });
 
 
 var app = builder.Build();

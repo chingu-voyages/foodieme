@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -77,13 +80,38 @@ namespace webapi.Services
             return token;
         }
 
-        public Task<bool> LogoutUser()
+        public string LogoutUser()
         {
-            throw new NotImplementedException();
+            // Create a claim with an expired expiration time
+            var claims = new List<Claim>
+    {
+        new Claim("sub", "logout"),
+        new Claim(JwtRegisteredClaimNames.Exp, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString())
+    };
+
+            // Key used to create the JWT
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+
+            // Need signing credentials
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var tokenOptions = new JwtSecurityToken(
+                issuer: _configuration["JWT:ValidIssuer"],
+                audience: _configuration["JWT:ValidAudience"],
+                claims: claims,
+                expires: DateTime.UtcNow, // Expired immediately
+                signingCredentials: creds
+            );
+
+            // Write an expired token
+            var jwt = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+
+            return jwt;
         }
 
         public async Task<UserModel> RegisterNewUser(UserRegister model)
         {
+            //if (!Modelstate)
             var userExist = await _context.Users.AnyAsync(user => model.Email == user.Email);
             if (userExist)
             {
@@ -98,9 +126,14 @@ namespace webapi.Services
                 Email = model.Email,
                 UserName = model.UserName,
                 DateJoined = DateTime.Now,
-                DateOfBirth = (DateTime)model.DateOfBirth
-
+                //DateOfBirth = (DateTime)(model.DateOfBirth.HasValue ? model.DateOfBirth.Value : (DateTime?)null)
             };
+
+        
+            if (model.DateOfBirth.HasValue)
+            {
+                userModel.DateOfBirth = model.DateOfBirth.Value;
+            }
 
             await AddAsync(userModel);
 
