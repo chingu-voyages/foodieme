@@ -27,6 +27,8 @@ namespace webapi.Controllers
 
         //to access the appsettings.json
         private readonly IConfiguration _configuration;
+        private readonly AuthServices authServices;
+
         //private readonly GenericServices<UserModel> genericServices;
 
         //private readonly AuthServices authServices;
@@ -37,15 +39,15 @@ namespace webapi.Controllers
         public AuthController(ApplicationDbContext context,
             UserManager<UserModel> userManager,
             SignInManager<UserModel> signInManager,
-            IConfiguration configuration
-            //GenericServices<UserModel> genericServices
-            //AuthServices authServices
+            IConfiguration configuration,
+            AuthServices authServices
             )
         {
             _context = context;
             this._userManager = userManager;
             this._signInManager = signInManager;
             this._configuration = configuration;
+            this.authServices = authServices;
             //this.genericServices = genericServices;
             //this.authServices = authServices;
         }
@@ -59,37 +61,39 @@ namespace webapi.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserModel>> Register(UserRegister userRegister)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest("Invalid form");
             }
-            var userExist = await _context.Users.AnyAsync(user => userRegister.Email == user.Email);
-            System.Diagnostics.Debug.WriteLine("result from context");
-            System.Diagnostics.Debug.WriteLine(userExist);
 
-            var result = await _userManager.FindByEmailAsync(userRegister.Email);
-            System.Diagnostics.Debug.WriteLine("result from user manager");
-            System.Diagnostics.Debug.WriteLine(result);
-            if (userExist)
+            var newUser = await authServices.RegisterNewUser(userRegister);
+            //var userExist = await _context.Users.AnyAsync(user => userRegister.Email == user.Email);
+            //System.Diagnostics.Debug.WriteLine("result from context");
+            //System.Diagnostics.Debug.WriteLine(userExist);
+
+            //var result = await _userManager.FindByEmailAsync(userRegister.Email);
+            //System.Diagnostics.Debug.WriteLine("result from user manager");
+            //System.Diagnostics.Debug.WriteLine(result);
+            if (newUser == null)
             {
                 return BadRequest("A user with this email address already exist");
             }
 
-            var hasher = new PasswordHasher<UserModel>();
-            var userModel = new UserModel
-            {
-                PasswordHash = hasher.HashPassword(null, userRegister.Password),
-                FirstName = userRegister.FirstName,
-                LastName = userRegister.LastName,
-                Email = userRegister.Email,
-                UserName = userRegister.UserName,
-                DateJoined = DateTime.Now,
-                DateOfBirth = (DateTime)userRegister.DateOfBirth
+            //var hasher = new PasswordHasher<UserModel>();
+            //var userModel = new UserModel
+            //{
+            //    PasswordHash = hasher.HashPassword(null, userRegister.Password),
+            //    FirstName = userRegister.FirstName,
+            //    LastName = userRegister.LastName,
+            //    Email = userRegister.Email,
+            //    UserName = userRegister.UserName,
+            //    DateJoined = DateTime.Now,
+            //    DateOfBirth = (DateTime)userRegister.DateOfBirth
 
-            };
+            //};
 
-            await _context.Users.AddAsync(userModel);
-            await _context.SaveChangesAsync();
+            //await _context.Users.AddAsync(userModel);
+            //await _context.SaveChangesAsync();
             //newUserModel.PasswordHash = hasher.HashPassword(null, userRegister.Password);
             //newUserModel.FirstName = userRegister.FirstName;
             //newUserModel.LastName = userRegister.LastName;
@@ -99,7 +103,7 @@ namespace webapi.Controllers
             //newUserModel.DateOfBirth = (DateTime)userRegister.DateOfBirth;
             //return CreatedAtAction("Registration"; newUser);
             //return Ok(newUser);
-            return Created("somewhere", userModel);
+            return Created("somewhere", newUser);
 
         }
 
@@ -153,7 +157,7 @@ namespace webapi.Controllers
                 new Claim("name", userModel.UserName),
                 new Claim(ClaimTypes.Email, userModel.Email),
                 new Claim("email", userModel.Email),
-                new Claim("id", userModel.Id),
+                new Claim("sub", userModel.Id),
             };
 
             // Key used to create the JWT and verify the JWT, whenever user's make a call.
@@ -183,37 +187,29 @@ namespace webapi.Controllers
             return jwt;
         }
 
+
         [HttpGet, Authorize]
         public ActionResult<string> GetUserName()
         {
             var username = User.FindFirst("name").Value!;
             Console.WriteLine($"username {username}");
 
-            var userId = User.FindFirst("id").Value!;
+            var userId = User.FindFirst("sub").Value!;
             Console.WriteLine($"userId {userId}");
 
-            //var userEmail = User.FindFirst("email").Value!;
-            var userEmail = User.FindFirst("email").Value;
-            Console.WriteLine($"userEmailClaim {userEmail}");
+            var userEmailClaim = User.FindFirst("email");
+            //var userEmail = User.FindFirst("email").Value;
+            Console.WriteLine($"userEmailClaim {userEmailClaim}");
 
-            //var userEmailClaim = User.FindFirst(ClaimTypes.Email).Value;
+            var userEmail = User.FindFirst(ClaimTypes.Email).Value;
+            Console.WriteLine($"userEmail {userEmail}");
 
-            //if (userEmailClaim != null)
-            //{
-            //    var userEmail = userEmailClaim.Value;
-            //    // Handle userEmail as needed
-            //    return Ok(new { userEmail });
-            //}
-            //else
-            //{
-            //    // Handle the case where the "email" claim is missing.
-            //    return BadRequest("The 'email' claim is missing.");
-            //}
             return Ok(new
             {
                 username,
                 userId,
-                userEmail
+                userEmail,
+                //userEmailClaim
             });
         }
 

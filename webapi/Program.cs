@@ -12,10 +12,17 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericServices<>));
+builder.Services.AddScoped<IRestaurantService, RestaurantServices>();
+builder.Services.AddScoped<IAuthService, AuthServices>();
+
+builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -32,20 +39,21 @@ builder.Services.AddSwaggerGen(opt =>
         BearerFormat = "JWT",
         Scheme = "bearer"
     });
-    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{}
-        }
-    });
+    //opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    //{
+    //    {
+    //        new OpenApiSecurityScheme
+    //        {
+    //            Reference = new OpenApiReference
+    //            {
+    //                Type=ReferenceType.SecurityScheme,
+    //                Id="Bearer"
+    //            }
+    //        },
+    //        new string[]{}
+    //    }
+    //});
+    opt.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
 //IConfiguration configuration = new ConfigurationBuilder()
@@ -65,7 +73,7 @@ options.SignIn.RequireConfirmedAccount = false)
     //.addjwt
 
 //Configure JWT authentication if needed
-// Add Authentication and JwtBearer
+// Add Authentication and JwtBearer middleware to add to Header
 builder.Services
     .AddAuthentication(options =>
     {
@@ -79,6 +87,7 @@ builder.Services
         options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters()
         {
+            //ValidateIssuerSigningKey=true,
             ValidateIssuer = false,
             ValidateAudience = false,
             ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
@@ -106,10 +115,6 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore).AddNewtonsoftJson(
     options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
-builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericServices<>));
-builder.Services.AddScoped<IRestaurantService, RestaurantServices>();
-
-builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 var app = builder.Build();
 
