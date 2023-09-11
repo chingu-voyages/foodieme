@@ -6,14 +6,14 @@ const CreateOuting = () => {
   const [selectedHour, setSelectedHour] = useState("1");
   const [selectedMinute, setSelectedMinute] = useState("0");
   const [selectedAmPm, setSelectedAmPm] = useState("am");
-
   const [description, setDescription] = useState("");
+  const [accompany, setAccompany] = useState(1);
   const [message, setMessage] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     const minute = selectedMinute == "0" ? "00" : "30";
     const time = `${selectedHour}:${minute} ${selectedAmPm}`;
-    console.log(restaurant, date, time, description);
+    console.log(restaurant, date, time, accompany, description);
   };
 
   const today = new Date();
@@ -62,6 +62,9 @@ const CreateOuting = () => {
           />
         </div>
         <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Time
+          </label>
           <div className="shadow appearance-none border rounded py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             <div className="flex">
               <select
@@ -109,6 +112,25 @@ const CreateOuting = () => {
         <div className="mb-6">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="accompany"
+          >
+            How many people do you want to eat with?
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="accompany"
+            type="number"
+            placeholder="Enter your due date"
+            value={accompany}
+            onChange={(e) => setAccompany(e.target.value)}
+            min="1"
+            required
+          />
+        </div>
+
+        <div className="mb-6">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="description"
           >
             Description
@@ -116,13 +138,13 @@ const CreateOuting = () => {
           <textarea
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="description"
-            placeholder="Enter your project description"
+            placeholder="Enter any additional information"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows="6"
-            required
           />
         </div>
+
         <div className="text-red-500 m-20 text-center">
           {message && message}
         </div>
