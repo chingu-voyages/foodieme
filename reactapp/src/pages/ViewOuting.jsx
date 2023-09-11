@@ -7,7 +7,10 @@ const sampleData = {
     image: "imagePath",
     description: "I would like to try new cuisines!!",
   },
-  restaurant: { name: "Tornado Ramen" },
+  restaurant: {
+    name: "Tornado Ramen",
+    address: "1234 Address St. Address, CA 11111",
+  },
   date: "2023-08-17",
   time: "12:30 pm",
   accompany: 3,
