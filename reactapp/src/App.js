@@ -1,7 +1,10 @@
 import React, { Component } from "react";
+import { Route, Routes } from "react-router-dom";
+
 import CreateOuting from "./pages/CreateOuting";
 import ViewOuting from "./pages/ViewOuting";
 import ViewRestaurant from "./pages/ViewRestaurant";
+
 export default class App extends Component {
   static displayName = App.name;
 
@@ -56,15 +59,11 @@ export default class App extends Component {
 
     return (
       <div>
-        <h1 id="tabelLabel" className="text-red-400">
-          Weather forecast
-        </h1>
-        <CreateOuting />
-        <ViewOuting />
-        <ViewRestaurant />
-        <p>This component demonstrates fetching data from the server.</p>
-
-        {contents}
+        <Routes>
+          <Route path="/create-outing" element={<CreateOuting />} />
+          <Route path="/view-outing" element={<ViewOuting />} />
+          <Route path="/view-restaurant" element={<ViewRestaurant />} />
+        </Routes>
       </div>
     );
   }

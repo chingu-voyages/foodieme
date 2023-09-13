@@ -40,7 +40,7 @@ const ViewRestaurant = () => {
   return (
     <div className="text-center">
       <h1 className="text-4xl m-5">{sampleData.name}</h1>
-      <div className="w-2/3 mx-auto">
+      <div className="w-2/3 mx-auto max-w-[600px]">
         <img src="https://res.cloudinary.com/dmaijlcxd/image/upload/v1670714105/cld-sample-4.jpg"></img>
       </div>
       <h2 className="text-xl m-5">{sampleData.address}</h2>

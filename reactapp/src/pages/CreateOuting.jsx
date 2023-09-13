@@ -20,7 +20,7 @@ const CreateOuting = () => {
   const minDate = today.toISOString().split("T")[0];
 
   return (
-    <div className="max-w-md mx-auto pt-48">
+    <div className="max-w-md mx-auto pt-10">
       <h1 className="text-2xl mb-3 font-bold text-center">Create New Outing</h1>
       <form
         onSubmit={handleSubmit}
