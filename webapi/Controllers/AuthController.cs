@@ -54,13 +54,22 @@ namespace webapi.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserModel>> Register([FromBody] UserRegister userRegister)
         {
-            Console.WriteLine("Model state: " + ModelState.IsValid);
+            Console.WriteLine("Model state: " + ModelState);
+            Console.WriteLine("Model state is valid: " + ModelState.IsValid);
 
             // Log the model data
             Console.WriteLine($"UserName: {userRegister.UserName}");
             Console.WriteLine($"Email: {userRegister.Email}");
 
             if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid form");
+            }
+
+            // manual checking for now
+            if (string.IsNullOrEmpty(userRegister.UserName) ||
+                string.IsNullOrEmpty(userRegister.Password) ||
+                string.IsNullOrEmpty(userRegister.Email)
             {
                 return BadRequest("Invalid form");
             }
@@ -78,38 +87,16 @@ namespace webapi.Controllers
         public async Task<ActionResult<UserModel>> Login([FromBody] UserLoginModel model)
         {
 
-            //string email = model.email;
-            //string password = model.password;
-            //System.Diagnostics.Debug.WriteLine($"Login {email}");
-            //System.Diagnostics.Debug.WriteLine($"Password {password}");
-            //Console.WriteLine($"Login {email}");
-            //Console.WriteLine($"Password {password}");
-            //var userExist = await _context.Users.FirstOrDefaultAsync(user => email == user.Email);
-
-            //if (userExist == null || userExist.Email != email)
-            //{
-            //    return BadRequest("Login Information does not match our records");
-            //}
-            //var hasher = new PasswordHasher<UserModel>();
-            //if (PasswordVerificationResult.Failed == hasher.VerifyHashedPassword(userExist, userExist.PasswordHash, password))
-            //{
-            //    return BadRequest("Login Information does not match our records");
-
-            //}
-            //var some = await _userManager.
-            //var something = await _signInManager.PasswordSignInAsync(userExist.Email, model.password, false, false);
-            //something.Succeeded
-            //Send JWTToken
-            //return CreatedAtAction("Registration", newUser);
-            //return Ok(newUser);
-            //string token = CreateToken(user);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid form");
+            }
 
             var loginRes = await authServices.LoginUser(model);
             if (loginRes.token == null)
             {
                 return BadRequest("Login Information does not match our records");
             }
-            await _signInManager.SignInAsync(loginRes.user, isPersistent: false);
 
             return Ok(loginRes.token);
 
