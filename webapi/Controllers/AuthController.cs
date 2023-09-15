@@ -67,12 +67,12 @@ namespace webapi.Controllers
             }
 
             // manual checking for now
-            if (string.IsNullOrEmpty(userRegister.UserName) ||
-                string.IsNullOrEmpty(userRegister.Password) ||
-                string.IsNullOrEmpty(userRegister.Email)
-            {
-                return BadRequest("Invalid form");
-            }
+            //if (string.IsNullOrEmpty(userRegister.UserName) ||
+            //    string.IsNullOrEmpty(userRegister.Password) ||
+            //    string.IsNullOrEmpty(userRegister.Email)
+            //{
+            //    return BadRequest("Invalid form");
+            //}
 
             var newUser = await authServices.RegisterNewUser(userRegister);
             if (newUser == null)
@@ -98,7 +98,7 @@ namespace webapi.Controllers
                 return BadRequest("Login Information does not match our records");
             }
 
-            return Ok(loginRes.token);
+            return Ok(new { token = loginRes.token });
 
         }
 
