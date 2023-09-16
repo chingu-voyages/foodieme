@@ -7,6 +7,8 @@ namespace webapi.Models
     {
         [NotMapped]
         public List<string>? FavouriteStyles { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
         public int? BudgetMin { get; set; }
         public int? BudgetMax { get; set; }
         public string? Picture { get; set; }
