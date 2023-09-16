@@ -27,34 +27,36 @@ builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(opt =>
+builder.Services.AddSwaggerGen(options =>
 {
-    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
-    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
         Description = "Please enter token",
         Name = "Authorization",
         Type = SecuritySchemeType.Http,
         BearerFormat = "JWT",
-        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        //Scheme = JwtBearerDefaults.AuthenticationScheme,
+        Scheme = "Bearer"
     });
-    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{}
-        }
-    });
-    opt.OperationFilter<SecurityRequirementsOperationFilter>();
+    //options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    //{
+    //    {
+    //        new OpenApiSecurityScheme
+    //        {
+    //            Reference = new OpenApiReference
+    //            {
+    //                Type=ReferenceType.SecurityScheme,
+    //                Id="Bearer"
+    //            }
+    //        },
+    //        new string[]{}
+    //    }
+    //});
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+
 
 //IConfiguration configuration = new ConfigurationBuilder()
 //    .SetBasePath(Directory.GetCurrentDirectory())
@@ -72,7 +74,7 @@ options.SignIn.RequireConfirmedAccount = false)
     .AddDefaultTokenProviders();
 //.addjwt
 
-//Configure JWT authentication if needed
+// Configure JWT authentication if needed
 // Add Authentication and JwtBearer middleware to add to Header
 builder.Services
     .AddAuthentication(options =>

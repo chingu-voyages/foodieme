@@ -103,7 +103,8 @@ namespace webapi.Controllers
         }
 
 
-        [HttpGet, Authorize]
+        [HttpGet]
+        [Authorize]
         public ActionResult<string> GetUserName()
         {
             var username = User.FindFirst("name").Value!;
