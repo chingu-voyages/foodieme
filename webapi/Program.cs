@@ -21,6 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericServices<>));
 builder.Services.AddScoped<IRestaurantService, RestaurantServices>();
 builder.Services.AddScoped<IAuthService, AuthServices>();
+builder.Services.AddScoped<IMealRequestService, MealRequestServices>();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
