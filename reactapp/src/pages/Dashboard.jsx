@@ -1,6 +1,38 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, userNavigate } from "react-router-dom";
+import OutingCard from "../components/OutingCard";
+import { formatDate } from "../utils/utils";
 import UpcomingOutingCard from "../components/UpcomingOutingCard";
+const sampleData = [
+  {
+    poster: {
+      username: "Bob",
+      image: "imagePath",
+      description: "I would like to try new cuisines!!",
+    },
+    restaurant: {
+      name: "Tornado Ramen",
+      address: "1234 Address St. Address, CA 11111",
+    },
+    date: "2023-08-17",
+    time: "12:30 pm",
+    accompany: 3,
+  },
+  {
+    poster: {
+      username: "Sam",
+      image: "imagePath",
+      description: "I would like to try new cuisines!!",
+    },
+    restaurant: {
+      name: "Steak House",
+      address: "45 Spence St. Address, CA 11111",
+    },
+    date: "2023-08-18",
+    time: "12:30 pm",
+    accompany: 5,
+  },
+];
 
 const yourOutings = [
   {
@@ -36,6 +68,11 @@ const yourOutings = [
 ];
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const moveToCreateOuting = () => {
+    navigate("/create-outing");
+  };
+
   return (
     <div className="text-center pt-16">
       <h1 className="font-extrabold text-[50px] w-full">FoodieMe</h1>
@@ -44,6 +81,20 @@ const Dashboard = () => {
       <div>
         {yourOutings.map((outing, index) => {
           return <UpcomingOutingCard key={index} outing={outing} />;
+        })}
+      </div>
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-10 py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        type="button"
+        onClick={moveToCreateOuting}
+      >
+        Create a new foodie outing
+      </button>
+      <h3>or</h3>
+      <h2 className="mt-5 font-bold italic">join a foodie outing near you</h2>
+      <div>
+        {sampleData.map((outing, index) => {
+          return <OutingCard key={index} outing={outing} />;
         })}
       </div>
     </div>
