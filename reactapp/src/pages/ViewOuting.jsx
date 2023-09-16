@@ -2,6 +2,7 @@ import React from "react";
 import PosterCard from "../components/PosterCard";
 import { Link } from "react-router-dom";
 import { formatDate } from "../utils/utils";
+import SideDrawer from "../components/SideDrawer";
 
 const sampleData = {
   poster: {
@@ -21,6 +22,7 @@ const sampleData = {
 const ViewOuting = () => {
   return (
     <div className="p-10">
+      <SideDrawer />
       <h1 className="text-2xl mb-3 font-bold text-center">Join Outing</h1>
       <PosterCard poster={sampleData.poster} />
       <h3 className="text-lg text-center mt-5 mb-5">

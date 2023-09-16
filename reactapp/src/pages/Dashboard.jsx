@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, userNavigate } from "react-router-dom";
 import OutingCard from "../components/OutingCard";
-import { formatDate } from "../utils/utils";
+import SideDrawer from "../components/SideDrawer";
 import UpcomingOutingCard from "../components/UpcomingOutingCard";
 const sampleData = [
   {
@@ -75,6 +75,7 @@ const Dashboard = () => {
 
   return (
     <div className="text-center pt-16">
+      <SideDrawer />
       <h1 className="font-extrabold text-[50px] w-full">FoodieMe</h1>
       <p className="font-light mt-[-10px]">Find someone to eat with you!</p>
       <h2 className="mt-5 font-bold italic">Your upcoming foodie outing</h2>
