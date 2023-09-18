@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { baseUrl } from "../constant";
 
 const Singup = () => {
   const [username, setUsername] = useState("");
@@ -9,6 +10,7 @@ const Singup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(username, email, password);
+    console.log(baseUrl);
   };
 
   return (
