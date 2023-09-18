@@ -1,5 +1,6 @@
-import React from "react";
-import { useNavigate, userNavigate } from "react-router-dom";
+import React, { useContext } from "react";
+import { UserContext } from "../context/UserContext";
+import { useNavigate, userNavigate, Link } from "react-router-dom";
 import OutingCard from "../components/OutingCard";
 import SideDrawer from "../components/SideDrawer";
 import UpcomingOutingCard from "../components/UpcomingOutingCard";
@@ -69,9 +70,21 @@ const yourOutings = [
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
   const moveToCreateOuting = () => {
     navigate("/create-outing");
   };
+  if (!user) {
+    return (
+      <div className="pt-32 text-center">
+        <h1 className="bold text-3xl mb-10">FoodieMe</h1>
+        <h1 className="text-2xl">Please login..</h1>
+        <Link className="text-blue-600 text-lg" to="/login">
+          Login
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="text-center pt-16">
