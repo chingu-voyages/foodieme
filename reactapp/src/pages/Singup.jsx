@@ -35,6 +35,9 @@ const Singup = () => {
       navigation("/dashboard");
     } catch (error) {
       console.log(error);
+      setMessage(
+        "The email might be on the database. Please use different email address"
+      );
     }
   };
 

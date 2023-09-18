@@ -1,13 +1,29 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { baseUrl } from "../constant";
+import { UserContext } from "../context/UserContext";
+import { useContext } from "react";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useContext(UserContext);
+  const navigation = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(username, password);
+    try {
+      const res = await axios.post(`${baseUrl}/api/Auth/login`, {
+        email,
+        password,
+      });
+      login(res.data);
+      navigation("/dashboard");
+    } catch (error) {
+      console.log(error);
+      setMessage("Email/Password is incorrect");
+    }
   };
 
   return (
@@ -22,15 +38,15 @@ const Login = () => {
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="username"
           >
-            Username
+            Email
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="username"
             type="text"
-            placeholder="Enter Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Enter Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
@@ -53,7 +69,7 @@ const Login = () => {
           />
         </div>
 
-        <div className="text-red-500 m-20 text-center">
+        <div className="text-red-500 m-10 text-center">
           {message && message}
         </div>
 

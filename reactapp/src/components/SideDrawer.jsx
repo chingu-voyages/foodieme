@@ -15,7 +15,7 @@ const SideDrawer = () => {
   };
   const handleLogout = async () => {
     try {
-      const res = await axios.get(`${baseUrl}/api/Auth/logout`);
+      const res = await axios.post(`${baseUrl}/api/Auth/logout`);
       logout();
       navigation("/");
     } catch (error) {
