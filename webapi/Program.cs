@@ -31,7 +31,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
         Description = "Please enter token",

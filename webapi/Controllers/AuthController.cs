@@ -108,17 +108,17 @@ namespace webapi.Controllers
         public ActionResult<string> GetUserName()
         {
             var username = User.FindFirst("name").Value!;
-            Console.WriteLine($"username {username}");
+            //Console.WriteLine($"username {username}");
 
             var userId = User.FindFirst("sub").Value!;
-            Console.WriteLine($"userId {userId}");
+            //Console.WriteLine($"userId {userId}");
 
             var userEmailClaim = User.FindFirst("email");
             //var userEmail = User.FindFirst("email").Value;
-            Console.WriteLine($"userEmailClaim {userEmailClaim}");
+            //Console.WriteLine($"userEmailClaim {userEmailClaim}");
 
             var userEmail = User.FindFirst(ClaimTypes.Email).Value;
-            Console.WriteLine($"userEmail {userEmail}");
+            //Console.WriteLine($"userEmail {userEmail}");
 
             return Ok(new
             {
@@ -141,143 +141,5 @@ namespace webapi.Controllers
             return Ok(new { message = "Logged out successfully", token = expiredToken });
         }
 
-        //// GET: UserVMs
-        //public async Task<IActionResult> Index()
-        //{
-        //    return View(await _context.Users.ToListAsync());
-        //}
-
-        //// GET: UserVMs/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null || _context.UserVM == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var userVM = await _context.UserVM
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (userVM == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(userVM);
-        //}
-
-        //// GET: UserVMs/Create
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
-
-        //// POST: UserVMs/Create
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Id,UserName,Email,BudgetMin,BudgetMax,Picture,DateOfBirth,DateJoined")] UserVM userVM)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(userVM);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(userVM);
-        //}
-
-        //// GET: UserVMs/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null || _context.UserVM == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var userVM = await _context.UserVM.FindAsync(id);
-        //    if (userVM == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(userVM);
-        //}
-
-        //// POST: UserVMs/Edit/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,Email,BudgetMin,BudgetMax,Picture,DateOfBirth,DateJoined")] UserVM userVM)
-        //{
-        //    if (id != userVM.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(userVM);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!UserVMExists(userVM.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(userVM);
-        //}
-
-        //// GET: UserVMs/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null || _context.UserVM == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var userVM = await _context.UserVM
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (userVM == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(userVM);
-        //}
-
-        //// POST: UserVMs/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    if (_context.UserVM == null)
-        //    {
-        //        return Problem("Entity set 'ApplicationDbContext.UserVM'  is null.");
-        //    }
-        //    var userVM = await _context.UserVM.FindAsync(id);
-        //    if (userVM != null)
-        //    {
-        //        _context.UserVM.Remove(userVM);
-        //    }
-
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool UserVMExists(int id)
-        //{
-        //    return _context.UserVM.Any(e => e.Id == id);
-        //}
     }
 }
