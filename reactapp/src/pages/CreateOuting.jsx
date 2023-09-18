@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserContext } from "../context/UserContext";
+import { Link } from "react-router-dom";
 import SideDrawer from "../components/SideDrawer";
 
 const CreateOuting = () => {
@@ -19,6 +21,18 @@ const CreateOuting = () => {
 
   const today = new Date();
   const minDate = today.toISOString().split("T")[0];
+  const { user } = useContext(UserContext);
+  if (!user) {
+    return (
+      <div className="pt-32 text-center">
+        <h1 className="bold text-3xl mb-10">FoodieMe</h1>
+        <h1 className="text-2xl">Please login..</h1>
+        <Link className="text-blue-600 text-lg" to="/login">
+          Login
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4">

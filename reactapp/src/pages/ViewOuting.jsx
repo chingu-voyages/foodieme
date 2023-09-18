@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import PosterCard from "../components/PosterCard";
+import { UserContext } from "../context/UserContext";
 import { Link } from "react-router-dom";
 import { formatDate } from "../utils/utils";
 import SideDrawer from "../components/SideDrawer";
@@ -20,6 +21,18 @@ const sampleData = {
 };
 
 const ViewOuting = () => {
+  const { user } = useContext(UserContext);
+  if (!user) {
+    return (
+      <div className="pt-32 text-center">
+        <h1 className="bold text-3xl mb-10">FoodieMe</h1>
+        <h1 className="text-2xl">Please login..</h1>
+        <Link className="text-blue-600 text-lg" to="/login">
+          Login
+        </Link>
+      </div>
+    );
+  }
   return (
     <div className="p-10">
       <SideDrawer />
