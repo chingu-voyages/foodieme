@@ -1,16 +1,41 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 import { baseUrl } from "../constant";
+import axios from "axios";
 
 const Singup = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { login } = useContext(UserContext);
+  const navigation = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(username, email, password);
-    console.log(baseUrl);
+    if (password !== confirmPassword) {
+      alert("Passwords don't match");
+      return;
+    }
+    try {
+      const res = await axios.post(`${baseUrl}/api/Auth/register`, {
+        UserName: username,
+        Password: password,
+        Email: email,
+        Phone: "000-000-0000",
+        FirstName: "---",
+        LastName: "----",
+        DateOfBirth: "2023-09-18T14:08:16.782Z",
+      });
+      console.log(res.data);
+      // just keep username and id here??
+      login(res.data);
+      navigation("/dashboard");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -71,7 +96,23 @@ const Singup = () => {
             required
           />
         </div>
-
+        <div className="mb-6">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="confirm"
+          >
+            Confirm Password
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="confirm"
+            type="password"
+            placeholder="Confirm your password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </div>
         <div className="text-red-500 m-20 text-center">
           {message && message}
         </div>
