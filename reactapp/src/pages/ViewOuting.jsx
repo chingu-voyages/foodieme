@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import PosterCard from "../components/PosterCard";
+import { UserContext } from "../context/UserContext";
+import { Link } from "react-router-dom";
 import { formatDate } from "../utils/utils";
+import SideDrawer from "../components/SideDrawer";
+
 const sampleData = {
   poster: {
     username: "Bob",
@@ -17,13 +21,28 @@ const sampleData = {
 };
 
 const ViewOuting = () => {
+  const { user } = useContext(UserContext);
+  if (!user) {
+    return (
+      <div className="pt-32 text-center">
+        <h1 className="bold text-3xl mb-10">FoodieMe</h1>
+        <h1 className="text-2xl">Please login..</h1>
+        <Link className="text-blue-600 text-lg" to="/login">
+          Login
+        </Link>
+      </div>
+    );
+  }
   return (
     <div className="p-10">
+      <SideDrawer />
       <h1 className="text-2xl mb-3 font-bold text-center">Join Outing</h1>
       <PosterCard poster={sampleData.poster} />
       <h3 className="text-lg text-center mt-5 mb-5">
         I want to eat at{" "}
-        <span className="font-bold">{sampleData.restaurant.name}</span>
+        <Link to="/view-restaurant" className="font-bold underline">
+          {sampleData.restaurant.name}
+        </Link>
       </h3>
       <div className="w-2/3 mx-auto max-w-[600px]">
         <img src="https://res.cloudinary.com/dmaijlcxd/image/upload/v1670714105/cld-sample-4.jpg"></img>

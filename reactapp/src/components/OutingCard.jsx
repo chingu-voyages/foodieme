@@ -1,7 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { formatDate } from "../utils/utils";
 
 const OutingCard = ({ outing }) => {
+  const navigate = useNavigate();
+  const moveToViewOuting = () => {
+    navigate("/view-outing");
+  };
   return (
     <div className="bg-white shadow-md rounded text-left w-2/3 px-8 pt-6 pb-6 mb-4 mx-auto gap-5">
       <h1>
@@ -20,6 +25,7 @@ const OutingCard = ({ outing }) => {
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded focus:outline-none focus:shadow-outline"
           type="submit"
+          onClick={moveToViewOuting}
         >
           Join
         </button>
