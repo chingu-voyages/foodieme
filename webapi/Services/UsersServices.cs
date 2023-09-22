@@ -36,5 +36,17 @@ namespace webapi.Services
             var userVM = mapper.Map<UserVM>(user);
             return userVM;
         }
+
+        public async Task<UserVM> UpdateUser(string id, UserVM model)
+        {
+            var user = await context.Users
+               .FirstOrDefaultAsync(user => user.Id == id);
+            var userVM =mapper.Map<UserVM>(user);
+            //update 
+            userVM = model;
+            var updatedUser = mapper.Map<UserModel>(userVM);
+            await UpdateAsync(updatedUser);
+            return userVM;
+        }
     }
 }

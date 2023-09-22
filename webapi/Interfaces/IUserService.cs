@@ -6,6 +6,7 @@ namespace webapi.Interfaces
     {
         Task<List<UserVM>> GetAllUsers();
         Task<UserVM> GetUser(string id);
+        Task<UserVM> UpdateUser(string id, UserVM user);
 
     }
 }

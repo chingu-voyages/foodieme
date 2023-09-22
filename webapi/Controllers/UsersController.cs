@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using webapi.Interfaces;
+using webapi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -34,9 +36,21 @@ namespace webapi.Controllers
         }
         
         // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{id}"), Authorize]
+        public async Task<IActionResult> EditUserInfo([FromRoute] string id, [FromBody] UserVM model)
         {
+            var currentUserId = User.FindFirst("sub")!.Value;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid Form");
+            }
+            //only allow own user to edit
+            if (currentUserId != id)
+            {
+                return Unauthorized();
+            }
+            var user = await userServices.UpdateUser(id, model);
+            return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
         }
 
         // DELETE api/<UsersController>/5
