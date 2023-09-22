@@ -1,9 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { useNavigate, userNavigate, Link } from "react-router-dom";
 import OutingCard from "../components/OutingCard";
 import SideDrawer from "../components/SideDrawer";
 import UpcomingOutingCard from "../components/UpcomingOutingCard";
+import axios from "axios";
+import { baseUrl } from "../constant";
 const sampleData = [
   {
     poster: {
@@ -71,6 +73,11 @@ const yourOutings = [
 const Dashboard = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+  const [outingData, setOutingData] = useState([]);
+  useEffect(async () => {
+    const data = await axios.get(`${baseUrl}/api/`);
+    console.log(data.data);
+  }, []);
   const moveToCreateOuting = () => {
     navigate("/create-outing");
   };
