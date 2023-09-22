@@ -74,9 +74,16 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const [outingData, setOutingData] = useState([]);
-  useEffect(async () => {
-    const data = await axios.get(`${baseUrl}/api/`);
-    console.log(data.data);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}/api/mealrequests`);
+        console.log(response.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchData();
   }, []);
   const moveToCreateOuting = () => {
     navigate("/create-outing");
