@@ -66,10 +66,10 @@ namespace webapi.Services
         {
             string email = model.email;
             string password = model.password;
-            System.Diagnostics.Debug.WriteLine($"Login {email}");
-            System.Diagnostics.Debug.WriteLine($"Password {password}");
-            Console.WriteLine($"Login {email}");
-            Console.WriteLine($"Password {password}");
+            //System.Diagnostics.Debug.WriteLine($"Login {email}");
+            //System.Diagnostics.Debug.WriteLine($"Password {password}");
+            //Console.WriteLine($"Login {email}");
+            //Console.WriteLine($"Password {password}");
             var user = await _context.Users.FirstOrDefaultAsync(user => email == user.Email);
             if (user == null)
             {
