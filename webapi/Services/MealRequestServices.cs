@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using webapi.Constants;
 using webapi.Data;
 using webapi.Interfaces;
 using webapi.Models;
@@ -63,6 +64,19 @@ namespace webapi.Services
             }
 
         }
+
+        public async Task<List<MealRequestVM>> GetAllMealRequests()
+        {
+            var mealRequestsList = await context.MealRequests
+                .Include(mr => mr.Creator)
+                .Include(mr => mr.Restaurant)
+                .ProjectTo<MealRequestVM>(mapperconfig)
+                .ToListAsync();
+
+            return mealRequestsList;
+        }
+
+
 
         public async Task<List<MealRequestVM>> GetAllMyMealRequests(string userId)
         {
@@ -181,7 +195,9 @@ namespace webapi.Services
                .Include(mr => mr.Creator)
                .FirstOrDefaultAsync(mr => mr.Id == id);
 
-            if (mealRequest == null || mealRequest.Creator.Id != userId)
+            // TODO: also allow admin to delete the MR
+
+            if (mealRequest == null || (mealRequest.Creator.Id != userId && userId != Admin.AdminUserId))
             {
                 return false;
             }

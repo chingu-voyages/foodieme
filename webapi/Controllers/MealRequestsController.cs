@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using webapi.Constants;
 using webapi.Data;
 using webapi.Interfaces;
 using webapi.Models;
@@ -25,6 +26,14 @@ namespace webapi.Controllers
         // GET: api/<MealRequestsController>
         [HttpGet, Authorize]
         public async Task<ActionResult<MealRequestVM>> GetAll()
+        {
+            var mealRequests = await mealRequestService.GetAllMealRequests();
+            return Ok(mealRequests);
+        }        
+        
+        // GET: api/<MealRequestsController>/me
+        [HttpGet("/me"), Authorize]
+        public async Task<ActionResult<MealRequestVM>> GetAllMyMealRequests()
         {
             var userId = User.FindFirst("sub")!.Value!;
             var mealRequests = await mealRequestService.GetAllMyMealRequests(userId);
@@ -96,10 +105,15 @@ namespace webapi.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var currentUserId = User.FindFirst("sub")!.Value!;
-            var result = mealRequestService.DeleteMealRequest(id, currentUserId);
-            if (result == null)
+            //var result = await mealRequestService.DeleteMealRequest(id, currentUserId);
+            var mealRequest = await mealRequestService.GetAsync(id);
+            if (mealRequest == null)
             {
-                return BadRequest();
+                return NotFound();
+            }
+            if (mealRequest.CreatorId != currentUserId || currentUserId != Admin.AdminUserId)
+            {
+                return Unauthorized();
             }
             return Ok("Deleted");
         }
