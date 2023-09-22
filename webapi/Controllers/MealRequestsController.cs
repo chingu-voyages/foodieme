@@ -31,6 +31,7 @@ namespace webapi.Controllers
             return Ok(mealRequests);
         }        
         
+        // TODO: Change thsi endpoint to /users/id/mealrequests to make it RESTful
         // GET: api/<MealRequestsController>/me
         [HttpGet("me"), Authorize]
         public async Task<ActionResult<MealRequestVM>> GetAllMyMealRequests()
