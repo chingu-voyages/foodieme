@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,7 @@ namespace webapi.Controllers
         }
 
         // GET: api/Restaurants
-        [HttpGet]
+        [HttpGet, Authorize]
         public async Task<ActionResult<IEnumerable<RestaurantVM>>> GetRestaurants()
         {
             if (_context.Restaurants == null)
@@ -45,7 +46,7 @@ namespace webapi.Controllers
         }
 
         // GET: api/Restaurants/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), Authorize]
         public async Task<ActionResult<RestaurantVM>> GetRestaurant(int id)
         {
             if (_context.Restaurants == null)
@@ -64,7 +65,7 @@ namespace webapi.Controllers
 
         // PUT: api/Restaurants/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> EditRestaurant(int id, RestaurantVM restaurantModel)
         {
             if (id != restaurantModel.Id)
@@ -97,7 +98,7 @@ namespace webapi.Controllers
 
         // POST: api/Restaurants
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<ActionResult<RestaurantModel>> CreateRestaurant([FromBody] RestaurantCreateVM model)
         {
             if (_context.Restaurants == null)
@@ -112,7 +113,7 @@ namespace webapi.Controllers
         }
 
         // DELETE: api/Restaurants/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> DeleteRestaurantModel(int id)
         {
             if (_context.Restaurants == null)
