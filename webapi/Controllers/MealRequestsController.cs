@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using webapi.Data;
 using webapi.Interfaces;
 using webapi.Models;
@@ -19,14 +21,14 @@ namespace webapi.Controllers
         {
             this.mealRequestService = mealRequestService;
         }
+
         // GET: api/<MealRequestsController>
         [HttpGet, Authorize]
         public async Task<ActionResult<MealRequestVM>> GetAll()
         {
-            //var mealRequestsList = mealRequestService.GetAllAsync();
-            var mealRequests = await mealRequestService.GetAllMealRequests();
+            var userId = User.FindFirst("sub")!.Value!;
+            var mealRequests = await mealRequestService.GetAllMealRequests(userId);
             return Ok(mealRequests);
-            //return new string[] { "value1", "value2" };
         }
 
         // GET api/<MealRequestsController>/5
@@ -52,10 +54,12 @@ namespace webapi.Controllers
             model.CreatorId = creatorId;
             try
             {
-            var newMealRequest = await mealRequestService.CreateMealRequest(model);
+                var newMealRequest = await mealRequestService.CreateMealRequest(model);
 
-            return CreatedAtAction(nameof (GetMealRequest),new {id= newMealRequest.Id} , newMealRequest);
-            } catch (Exception ex) {
+                return CreatedAtAction(nameof(GetMealRequest), new { id = newMealRequest.Id }, newMealRequest);
+            }
+            catch (Exception ex)
+            {
                 return BadRequest(ex);
             }
 
@@ -63,8 +67,42 @@ namespace webapi.Controllers
 
         // PUT api/<MealRequestsController>/5
         [HttpPut("{id}"), Authorize]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> EditMealRequest([FromBody] MealRequestVM model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Not a valid model");
+            }
+            var currentUserId = User.FindFirst("sub")!.Value!;
+            if (model.CreatorId == currentUserId)
+            {
+                // Make a full modification of the body
+                var mealrequestModel = await mealRequestService.UpdateMealRequest(model);
+                return Ok(mealrequestModel);
+            }
+            else
+            {
+                // Not modifying entire entry, just adding companions
+                // If currentUSer is in the companionsId list, delete it from the list
+                if (model.CompanionsId.Contains(currentUserId))
+                {
+                    await mealRequestService.LeaveMealRequest(model.Id, currentUserId);
+
+                }
+                else
+                {
+                    // add user to the companions list
+                    await mealRequestService.JoinMealRequest(model.Id, currentUserId);
+
+                }
+
+                //Else, if' he's not, add him to the list
+                return Ok(model);
+            }
+
+            //IF not, check if current user is in the companions list
+            // If he is, take him off. He is leaving the rquest
+            // If he is not, add his to the compnaions lists
         }
 
         // DELETE api/<MealRequestsController>/5

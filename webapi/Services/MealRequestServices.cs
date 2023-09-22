@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using webapi.Data;
 using webapi.Interfaces;
@@ -62,24 +63,93 @@ namespace webapi.Services
 
         }
 
-        public async Task<List<MealRequestVM>> GetAllMealRequests()
+        public async Task<List<MealRequestVM>> GetAllMealRequests(string userId)
         {
-            var mealRequestsList = await context.MealRequests
+            var userModel = await context.Users.FindAsync(userId);
+            if (userModel == null)
+            {
+                return null;
+            }
+            var mealRequestsList = new List<MealRequestModel>();
+            // if admin, get all
+            if (userModel.UserName == "admin" && userModel.Email == "admin@foodieme.ca")
+            {
+            mealRequestsList = await context.MealRequests
                 .Include(mr => mr.Creator)
                 .Include(mr => mr.Restaurant)
                 .ToListAsync();
+            } else
+            {
+                mealRequestsList = await context.MealRequests
+                .Include(mr => mr.Creator)
+                .Include(mr => mr.Restaurant)
+                .Where(mr => mr.Creator.Id == userId)
+                .ToListAsync();
+            }
             var mealRequestsListVM = mapper.Map<List<MealRequestVM>>(mealRequestsList);
             return mealRequestsListVM;
         }
 
-        public Task<MealRequestVM> JoinMealRequest(string id)
+        public async Task<MealRequestVM?> JoinMealRequest(int id, string userId)
         {
-            throw new NotImplementedException();
+            var mealRequestModel = context.MealRequests.FirstOrDefault(mr => mr.Id == id);
+            if (mealRequestModel == null)
+            {
+                return null;
+            }
+            var userToAdd = context.Users.FirstOrDefault(user => user.Id == userId);
+            if (userToAdd == null)
+            {
+                return null;
+            }
+            mealRequestModel?.Companions?.Add(userToAdd);
+
+            await UpdateAsync(mealRequestModel!);
+
+            var mrVM = mapper.Map<MealRequestVM>(mealRequestModel);
+
+            return mrVM;
         }
 
-        public Task<MealRequestVM> LeaveMealRequest(string id)
+        public async Task<MealRequestVM?> LeaveMealRequest(int id, string userId)
         {
-            throw new NotImplementedException();
+            var mealRequestModel = context.MealRequests.FirstOrDefault(mr => mr.Id == id);
+            if (mealRequestModel == null)
+            {
+                return null;
+            }
+            var userToRemove = context.Users.FirstOrDefault(user => user.Id == userId);
+            if (userToRemove == null)
+            {
+                return null;
+            }
+            mealRequestModel?.Companions?.Remove(userToRemove);
+
+            await UpdateAsync(mealRequestModel!);
+
+            var mrVM = mapper.Map<MealRequestVM>(mealRequestModel);
+
+            return mrVM;
+        }
+
+        public async Task<MealRequestVM?> UpdateMealRequest(MealRequestVM model)
+        {
+            var mealrequestModel = await GetAsync(model.Id);
+            if (mealrequestModel == null)
+            {
+                return null;
+            }
+
+            // full modify
+            //mealrequestModel = model;
+
+            var updatedModel = mapper.Map<MealRequestModel>(model);
+
+            await UpdateAsync(updatedModel);
+
+            var updatedVM = mapper.Map<MealRequestVM>(updatedModel);
+
+            return updatedVM;
         }
     }
 }

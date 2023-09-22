@@ -30,10 +30,6 @@ namespace webapi.Controllers
         private readonly IConfiguration _configuration;
         private readonly IAuthService authServices;
 
-        //private readonly GenericServices<UserModel> genericServices;
-
-        //private readonly AuthServices authServices;
-
         //For testing purposes
         //public static UserModel newUserModel = new UserModel();
 
