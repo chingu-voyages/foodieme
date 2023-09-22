@@ -31,8 +31,16 @@ namespace webapi.Data.Configurations
                 .ReverseMap();
             CreateMap<RestaurantModel, RestaurantVM>().ReverseMap();
             CreateMap<RestaurantCreateVM, RestaurantModel>().ReverseMap();
-            CreateMap<UserModel, UserVM>().ReverseMap();
             CreateMap<UserModel, CreatorVM>().ReverseMap();
+            CreateMap<UserModel, UserVM>()
+                .ForMember(dest => dest.CreatedMealRequests, opt => opt.MapFrom(src => src.CreatedMealRequests))
+                .ForMember(dest => dest.CreatedRestaurants, opt => opt.MapFrom(src => src.CreatedRestaurants))
+                .AfterMap((src, dest, context) =>
+                {
+                    dest.CreatedMealRequests = context.Mapper.Map<List<MealRequestVM>>(src.CreatedMealRequests);
+                    dest.CreatedRestaurants = context.Mapper.Map<List<RestaurantVM>>(src.CreatedRestaurants);
+                })
+                .ReverseMap();
             CreateMap<RestaurantModel, RestaurantVM>()
                 .ForMember(dest => dest.Creator, opt => opt.MapFrom(src => src.Creator));
             CreateMap<MealRequestModel, MealRequestVM>()

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using webapi.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -9,33 +10,29 @@ namespace webapi.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly IUserService userServices;
+
+        public UsersController(IUserService userServices)
+        {
+            this.userServices = userServices;
+        }
         // GET: api/<UsersController>
         [HttpGet, Authorize(Policy = "AdminOnly")]
-        public IEnumerable<string> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return new string[] { "value1", "value2" };
+            var allUsers = await userServices.GetAllUsers();
+            return Ok(allUsers);
         }
 
-        // GET api/<UsersController>/5
+        // GET api/<UsersController>/dfjkdhskhjkdh
         [HttpGet("{id}"), Authorize]
-        public string Get(int id)
+        public async Task<IActionResult> Get(string id)
         {
-            return "value";
-        }
+            var user = await userServices.GetUser(id);
+            return Ok(user);
 
-        // POST api/<UsersController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        } 
+        }
         
-        // POST api/<UsersController>/login
-        [HttpPost]
-        [Route("register")]
-        public void Register([FromBody] string value)
-        {
-        }
-
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)

@@ -32,7 +32,7 @@ namespace webapi.Controllers
         }        
         
         // GET: api/<MealRequestsController>/me
-        [HttpGet("/me"), Authorize]
+        [HttpGet("me"), Authorize]
         public async Task<ActionResult<MealRequestVM>> GetAllMyMealRequests()
         {
             var userId = User.FindFirst("sub")!.Value!;
@@ -41,7 +41,7 @@ namespace webapi.Controllers
         }
 
         // GET api/<MealRequestsController>/5
-        [HttpGet("{id}"), Authorize]
+        [HttpGet("{id:int}"), Authorize]
         public async Task<ActionResult<MealRequestVM>> GetMealRequest(int id)
         {
             var mealRequest = await mealRequestService.GetMealRequest(id);
