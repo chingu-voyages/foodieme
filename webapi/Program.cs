@@ -13,6 +13,7 @@ using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Swashbuckle.AspNetCore.Filters;
+using webapi.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -111,6 +112,14 @@ builder.Services
     });
 
 var supabaseUrl = builder.Configuration["Supabase:URL"];
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+    {
+        policy.RequireClaim("sub", Admin.AdminUserId);
+    });
+});
 
 
 //JSON Serializer
