@@ -37,6 +37,8 @@ namespace webapi.Data.Configurations
                 .ForMember(dest => dest.Creator, opt => opt.MapFrom(src => src.Creator));
             CreateMap<MealRequestModel, MealRequestVM>()
                 .ForMember(dest => dest.CreatorName, opt => opt.MapFrom(src => src.Creator.UserName))
+                .ForMember(dest => dest.CompanionsNames, opt => opt.MapFrom(src => src.Companions!.Select(c => c.UserName!).ToList()))
+                .ForMember(dest => dest.CompanionsId, opt => opt.MapFrom(src => src.Companions!.Select(c => c.Id!).ToList()))
                 //enables nested mapping for different models
                 .AfterMap((src, dest, context) =>
                 {

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Reflection;
 
 namespace webapi.Services.Utils
 {
@@ -14,12 +15,34 @@ namespace webapi.Services.Utils
             }
 
             Type type = obj.GetType();
-            PropertyInfo[] properties = type.GetProperties();
 
-            foreach (PropertyInfo property in properties)
+            if (typeof(IEnumerable).IsAssignableFrom(type))
             {
-                object value = property.GetValue(obj);
-                Console.WriteLine($"{property.Name}: {value}");
+                // If obj is a collection (e.g., List), iterate through its elements
+                int index = 0;
+                foreach (var item in (IEnumerable)obj)
+                {
+                    Console.WriteLine($"Element {index} of collection:");
+
+                    PropertyInfo[] itemProperties = item.GetType().GetProperties();
+                    foreach (PropertyInfo property in itemProperties)
+                    {
+                        object value = property.GetValue(item);
+                        Console.WriteLine($"{property.Name}: {value}");
+                    }
+
+                    index++;
+                }
+            }
+            else
+            {
+                // Handle the case when obj is a single object
+                PropertyInfo[] properties = type.GetProperties();
+                foreach (PropertyInfo property in properties)
+                {
+                    object value = property.GetValue(obj);
+                    Console.WriteLine($"{property.Name}: {value}");
+                }
             }
         }
     }
