@@ -86,37 +86,22 @@ namespace webapi.Controllers
                 // Make a full modification of the body
                 return Unauthorized();
             }
-            //else
             var mealrequestModel = await mealRequestService.UpdateMealRequest(model, id);
             return Ok(mealrequestModel);
-            //{
-            //    // Not modifying entire entry, just adding companions
-            //    // If currentUSer is in the companionsId list, delete it from the list
-            //    if (model.CompanionsId.Contains(currentUserId))
-            //    {
-            //        await mealRequestService.LeaveMealRequest(id, currentUserId);
-
-            //    }
-            //    else
-            //    {
-            //        // add user to the companions list
-            //        await mealRequestService.JoinMealRequest(id, currentUserId);
-
-            //    }
-
-            //Else, if' he's not, add him to the list
-            //    return Ok(model);
-            //}
-
-            //IF not, check if current user is in the companions list
-            // If he is, take him off. He is leaving the rquest
-            // If he is not, add his to the compnaions lists
+          
         }
 
         // DELETE api/<MealRequestsController>/5
         [HttpDelete("{id}"), Authorize]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            var currentUserId = User.FindFirst("sub")!.Value!;
+            var result = mealRequestService.DeleteMealRequest(id, currentUserId);
+            if (result == null)
+            {
+                return BadRequest();
+            }
+            return Ok("Deleted");
         }
 
         // PATCH api/<MealRequestsController>/5/join
@@ -126,17 +111,6 @@ namespace webapi.Controllers
         {
             var currentUserId = User.FindFirst("sub")!.Value!;
 
-            //if (model.CompanionsId.Contains(currentUserId))
-            //{
-            //    await mealRequestService.LeaveMealRequest(id, currentUserId);
-
-            //}
-            //else
-            //{
-            //    // add user to the companions list
-            //    await mealRequestService.JoinMealRequest(id, currentUserId);
-
-            //}
             try
             {
             await mealRequestService.EditParticipation(id, currentUserId);
@@ -147,12 +121,6 @@ namespace webapi.Controllers
                 return BadRequest(ex);
             }
 
-            //Else, if' he's not, add him to the list
-
-
-            //IF not, check if current user is in the companions list
-            // If he is, take him off. He is leaving the rquest
-            // If he is not, add his to the compnaions lists
         }
     }
 }

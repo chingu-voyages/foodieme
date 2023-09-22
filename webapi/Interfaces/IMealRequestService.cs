@@ -11,6 +11,7 @@ namespace webapi.Interfaces
         Task<List<MealRequestVM>> GetAllMyMealRequests(string userId);
         Task<MealRequestVM?> GetMealRequest(int id);
         //Task<List<MealRequestVM>> GetAllMyMealRequests();
+        Task<bool> DeleteMealRequest(int id, string userId);
 
     }
 }

@@ -160,27 +160,6 @@ namespace webapi.Services
             return mrVM;
         }
 
-        //public async Task<MealRequestVM?> LeaveMealRequest(int id, string userId)
-        //{
-        //    var mealRequestModel = context.MealRequests.FirstOrDefault(mr => mr.Id == id);
-        //    if (mealRequestModel == null)
-        //    {
-        //        return null;
-        //    }
-        //    var userToRemove = context.Users.FirstOrDefault(user => user.Id == userId);
-        //    if (userToRemove == null)
-        //    {
-        //        return null;
-        //    }
-        //    mealRequestModel?.Companions?.Remove(userToRemove);
-
-        //    await UpdateAsync(mealRequestModel!);
-
-        //    var mrVM = mapper.Map<MealRequestVM>(mealRequestModel);
-
-        //    return mrVM;
-        //}
-
         public async Task<MealRequestVM?> UpdateMealRequest(MealRequestVM model, int id)
         {
             var mealrequestModel = await GetAsync(model.Id);
@@ -199,6 +178,20 @@ namespace webapi.Services
             var updatedVM = mapper.Map<MealRequestVM>(updatedModel);
 
             return updatedVM;
+        }
+
+        public async Task<bool> DeleteMealRequest(int id, string userId)
+        {
+            var mealRequest = await context.MealRequests
+               .Include(mr => mr.Creator)
+               .FirstOrDefaultAsync(mr => mr.Id == id);
+
+            if (mealRequest == null || mealRequest.Creator.Id != userId)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
