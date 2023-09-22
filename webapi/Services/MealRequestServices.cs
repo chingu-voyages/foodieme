@@ -65,6 +65,19 @@ namespace webapi.Services
 
         }
 
+        public async Task<List<MealRequestVM>> GetAllMealRequests()
+        {
+            var mealRequestsList = await context.MealRequests
+                .Include(mr => mr.Creator)
+                .Include(mr => mr.Restaurant)
+                .ProjectTo<MealRequestVM>(mapperconfig)
+                .ToListAsync();
+
+            return mealRequestsList;
+        }
+
+
+
         public async Task<List<MealRequestVM>> GetAllMyMealRequests(string userId)
         {
             var userModel = await context.Users.FindAsync(userId);

@@ -27,6 +27,14 @@ namespace webapi.Controllers
         [HttpGet, Authorize]
         public async Task<ActionResult<MealRequestVM>> GetAll()
         {
+            var mealRequests = await mealRequestService.GetAllMealRequests();
+            return Ok(mealRequests);
+        }        
+        
+        // GET: api/<MealRequestsController>/me
+        [HttpGet("/me"), Authorize]
+        public async Task<ActionResult<MealRequestVM>> GetAllMyMealRequests()
+        {
             var userId = User.FindFirst("sub")!.Value!;
             var mealRequests = await mealRequestService.GetAllMyMealRequests(userId);
             return Ok(mealRequests);

@@ -10,7 +10,7 @@ namespace webapi.Interfaces
         Task<MealRequestVM?> UpdateMealRequest(MealRequestVM model, int id);
         Task<List<MealRequestVM>> GetAllMyMealRequests(string userId);
         Task<MealRequestVM?> GetMealRequest(int id);
-        //Task<List<MealRequestVM>> GetAllMyMealRequests();
+        Task<List<MealRequestVM>> GetAllMealRequests();
         Task<bool> DeleteMealRequest(int id, string userId);
 
     }
