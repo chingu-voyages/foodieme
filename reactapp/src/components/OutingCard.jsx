@@ -5,21 +5,21 @@ import { formatDate } from "../utils/utils";
 const OutingCard = ({ outing }) => {
   const navigate = useNavigate();
   const moveToViewOuting = () => {
-    navigate("/view-outing");
+    navigate(`/view-outing/${outing.Id}`);
   };
   return (
     <div className="bg-white shadow-md rounded text-left w-2/3 px-8 pt-6 pb-6 mb-4 mx-auto gap-5">
       <h1>
-        <span className="font-bold">{outing.poster.username} </span>
+        <span className="font-bold">{outing.CreatorName} </span>
         wants to eat here
       </h1>
       <h1>
-        On <span className="font-bold">{formatDate(outing.date)} </span>
+        On <span className="font-bold">{formatDate(outing.DateTime)} </span>
       </h1>
       <h1>
         {" "}
         and is looking for{" "}
-        <span className="font-bold">{outing.accompany} companions</span>
+        <span className="font-bold">{outing.NumberOfPeople} companions</span>
       </h1>
       <div className="flex mt-3 justify-center">
         <button

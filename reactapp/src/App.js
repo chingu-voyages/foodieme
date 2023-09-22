@@ -20,7 +20,7 @@ const App = () => {
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="/create-outing" element={<CreateOuting />} />
-          <Route path="/view-outing" element={<ViewOuting />} />
+          <Route path="/view-outing/:id" element={<ViewOuting />} />
           <Route path="/view-restaurant" element={<ViewRestaurant />} />
         </Routes>
       </UserProvider>

@@ -6,6 +6,7 @@ import SideDrawer from "../components/SideDrawer";
 import UpcomingOutingCard from "../components/UpcomingOutingCard";
 import axios from "axios";
 import { baseUrl } from "../constant";
+
 const sampleData = [
   {
     poster: {
@@ -72,13 +73,23 @@ const yourOutings = [
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
-  const [outingData, setOutingData] = useState([]);
+  const { user, headers } = useContext(UserContext);
+  console.log(user);
+  const [myOutings, setMyOutings] = useState([]);
+  const [outings, setOutings] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/api/mealrequests`);
+        const response = await axios.get(`${baseUrl}/api/mealrequests`, {
+          headers: headers,
+        });
         console.log(response.data);
+        // sort out outings
+        const yourOutings = [];
+        const newOutings = [];
+        for (let outing of response.data) {
+        }
+        setOutings(response.data);
       } catch (err) {
         console.error(err);
       }
@@ -121,7 +132,7 @@ const Dashboard = () => {
       <h3>or</h3>
       <h2 className="mt-5 font-bold italic">join a foodie outing near you</h2>
       <div>
-        {sampleData.map((outing, index) => {
+        {outings.map((outing, index) => {
           return <OutingCard key={index} outing={outing} />;
         })}
       </div>
