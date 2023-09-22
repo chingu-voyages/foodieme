@@ -48,15 +48,10 @@ namespace webapi.Services
             };
             var newMealReq = await AddAsync(newMealReqModel);
             Console.WriteLine("Added meal request");
-            //ObjectLogger.LogObject(newMealReq);
-            //ObjectLogger.LogObject(newMealReq.Creator);
-            //ObjectLogger.LogObject(newMealReq.Restaurant);
             try
             {
                 var newMealReqVM = mapper.Map<MealRequestVM>(newMealReq);
                 Console.WriteLine("mapped back to MeaRequestVM");
-                //newMealReqVM.Creator = mapper.Map<CreatorVM>(newMealReq.Creator);
-                //newMealReqVM.Restaurant = mapper.Map<RestaurantVM>(newMealReq.Restaurant);
                 ObjectLogger.LogObject(newMealReqVM);
                 return newMealReqVM;
 
