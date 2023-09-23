@@ -30,7 +30,6 @@ const Singup = () => {
         LastName: "----",
         DateOfBirth: "2023-09-18T14:08:16.782Z",
       });
-      console.log(res.data);
       // might ask to change to give me token on res if we have time
       const res2 = await axios.post(`${baseUrl}/api/Auth/login`, {
         email,
