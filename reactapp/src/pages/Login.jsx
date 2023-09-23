@@ -4,6 +4,7 @@ import axios from "axios";
 import { baseUrl } from "../constant";
 import { UserContext } from "../context/UserContext";
 import { useContext } from "react";
+import jwt from "jwt-decode";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -18,7 +19,10 @@ const Login = () => {
         email,
         password,
       });
-      login(res.data);
+      const token = res.data.token;
+      const user = jwt(token);
+
+      login(user, token);
       navigation("/dashboard");
     } catch (error) {
       console.log(error);
