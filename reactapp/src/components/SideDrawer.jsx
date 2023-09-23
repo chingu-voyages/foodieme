@@ -6,7 +6,7 @@ import { baseUrl } from "../constant";
 import axios from "axios";
 
 const SideDrawer = () => {
-  const { logout } = useContext(UserContext);
+  const { logout, user } = useContext(UserContext);
   const navigation = useNavigate();
   const [isClosed, setIsClosed] = useState(true);
 
@@ -42,6 +42,7 @@ const SideDrawer = () => {
           >
             X
           </button>
+          <h3 className="italic m-3">Hello {user.name}!!</h3>
           <ul className="mt-10 text-lg">
             <li>
               <Link to="/dashboard">Dashboard</Link>
@@ -49,7 +50,6 @@ const SideDrawer = () => {
             <li>
               <Link to="/create-outing">Create Outing</Link>
             </li>
-            <li>Settings</li>
           </ul>
           <button
             className="bg-red-500 mt-10 hover:bg-red-700 text-white font-bold py-1 px-3 rounded focus:outline-none focus:shadow-outline"

@@ -74,22 +74,33 @@ const yourOutings = [
 const Dashboard = () => {
   const navigate = useNavigate();
   const { user, headers } = useContext(UserContext);
-  console.log(user);
   const [myOutings, setMyOutings] = useState([]);
   const [outings, setOutings] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/api/mealrequests`, {
-          headers: headers,
-        });
-        console.log(response.data);
-        // sort out outings
-        const yourOutings = [];
-        const newOutings = [];
-        for (let outing of response.data) {
+        if (headers) {
+          const response = await axios.get(`${baseUrl}/api/mealrequests`, {
+            headers: headers,
+          });
+
+          // sort out outings
+          const yourOutings = [];
+          const otherOutings = [];
+          for (let outing of response.data) {
+            if (outing.CreatorId === user.sub) {
+              outing["isOwn"] = true;
+              yourOutings.push(outing);
+            } else if (outing.CompanionsId.indexOf() !== -1) {
+              outing["isOwn"] = false;
+              yourOutings.push(outing);
+            } else {
+              otherOutings.push(outing);
+            }
+          }
+          setMyOutings(yourOutings);
+          setOutings(otherOutings);
         }
-        setOutings(response.data);
       } catch (err) {
         console.error(err);
       }
@@ -118,7 +129,7 @@ const Dashboard = () => {
       <p className="font-light mt-[-10px]">Find someone to eat with you!</p>
       <h2 className="mt-5 font-bold italic">Your upcoming foodie outing</h2>
       <div>
-        {yourOutings.map((outing, index) => {
+        {myOutings.map((outing, index) => {
           return <UpcomingOutingCard key={index} outing={outing} />;
         })}
       </div>

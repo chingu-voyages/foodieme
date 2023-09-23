@@ -1,10 +1,14 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SideDrawer from "../components/SideDrawer";
+import axios from "axios";
+import { baseUrl } from "../constant";
+import { convertToTimestamp } from "../utils/utils";
 
 const CreateOuting = () => {
-  const [restaurant, setRestaurant] = useState("");
+  const [restaurants, setRestaurants] = useState("");
+  const [selectedRestaurant, setSelectedRestaurant] = useState(1);
   const [date, setDate] = useState("");
   const [selectedHour, setSelectedHour] = useState("1");
   const [selectedMinute, setSelectedMinute] = useState("0");
@@ -12,16 +16,50 @@ const CreateOuting = () => {
   const [description, setDescription] = useState("");
   const [accompany, setAccompany] = useState(1);
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const minute = selectedMinute == "0" ? "00" : "30";
     const time = `${selectedHour}:${minute} ${selectedAmPm}`;
-    console.log(restaurant, date, time, accompany, description);
+    const timeStamp = convertToTimestamp(date + " " + time);
+
+    console.log(selectedRestaurant, timeStamp, accompany, description);
+    try {
+      const res = axios.post(
+        `${baseUrl}/api/MealRequests`,
+        {
+          CreaterId: user.sub,
+          RestaurantId: selectedRestaurant,
+          DateTime: timeStamp,
+          NumberOfPeople: accompany,
+        },
+        { headers }
+      );
+      navigate("/dashboard");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const today = new Date();
   const minDate = today.toISOString().split("T")[0];
-  const { user } = useContext(UserContext);
+  const { user, headers } = useContext(UserContext);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${baseUrl}/api/Restaurants`, {
+          headers: headers,
+        });
+        console.log(res.data);
+        setRestaurants(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, []);
+
   if (!user) {
     return (
       <div className="pt-32 text-center">
@@ -45,22 +83,22 @@ const CreateOuting = () => {
           onSubmit={handleSubmit}
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mr-2 ml-2"
         >
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="Where"
+          <div className="mb-4 text-lg">
+            <label htmlFor="dropdown">Select Restaurant:</label>
+            <select
+              id="dropdown"
+              value={selectedRestaurant}
+              onChange={(e) => {
+                setSelectedRestaurant(e.target.value);
+              }}
             >
-              Where?
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="title"
-              type="text"
-              placeholder="Enter Restaurant"
-              value={restaurant}
-              onChange={(e) => setRestaurant(e.target.value)}
-              required
-            />
+              {restaurants.length > 0 &&
+                restaurants.map((restaurant) => (
+                  <option key={restaurant.Id} value={restaurant.Id}>
+                    {restaurant.Name}
+                  </option>
+                ))}
+            </select>
           </div>
           <div className="mb-6">
             <label

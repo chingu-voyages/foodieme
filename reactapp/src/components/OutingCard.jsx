@@ -11,7 +11,8 @@ const OutingCard = ({ outing }) => {
     <div className="bg-white shadow-md rounded text-left w-2/3 px-8 pt-6 pb-6 mb-4 mx-auto gap-5">
       <h1>
         <span className="font-bold">{outing.CreatorName} </span>
-        wants to eat here
+        wants to eat at{" "}
+        <span className="font-bold">{outing.Restaurant.Name}</span>
       </h1>
       <h1>
         On <span className="font-bold">{formatDate(outing.DateTime)} </span>
