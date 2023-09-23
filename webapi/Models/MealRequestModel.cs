@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Configuration;
 
 namespace webapi.Models
 {
@@ -7,6 +8,8 @@ namespace webapi.Models
         [ForeignKey("UserId")]
         public string CreatorId { get; set; }
         public UserModel Creator { get; set; }
+        
+        public int RestaurantId { get; set; }
         [ForeignKey("RestaurantId")]
         public RestaurantModel Restaurant { get; set; }
         public int NumberOfPeople { get; set; }

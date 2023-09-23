@@ -13,5 +13,6 @@ namespace webapi.Models
         public string Budget { get; set; }
         public string Style { get; set; }
         public string Address { get; set; }
+        public List<MealRequestModel>? MealRequests { get; set; }
     }
 }

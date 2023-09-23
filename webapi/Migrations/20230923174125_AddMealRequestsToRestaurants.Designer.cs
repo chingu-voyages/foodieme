@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webapi.Data;
 
@@ -11,9 +12,11 @@ using webapi.Data;
 namespace webapi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230923174125_AddMealRequestsToRestaurants")]
+    partial class AddMealRequestsToRestaurants
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -256,17 +259,17 @@ namespace webapi.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b0376a7b-05bc-425d-8822-fabad0958951",
-                            DateJoined = new DateTime(2023, 9, 23, 17, 51, 48, 147, DateTimeKind.Utc).AddTicks(391),
+                            ConcurrencyStamp = "97ef8d94-32e2-4cae-87e8-828a2072d9f2",
+                            DateJoined = new DateTime(2023, 9, 23, 17, 41, 24, 348, DateTimeKind.Utc).AddTicks(6515),
                             DateOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user1@test.ca",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "USER1@TEST.CA",
                             NormalizedUserName = "USER1",
-                            PasswordHash = "AQAAAAIAAYagAAAAELwyhDo5VXyKITRzIiHHSiOtxeJPYVQmc3lJiyrspZ8kCFEM2nu2n2kcL73eN5olvg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEP3LWqDt0aU6ybSun9xV0I5NHyTdVGwGS0FwVSPKc5FEpYOIdQEC5H/s80gBvCmXyQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "31995640-351b-45de-947e-216c01f27fea",
+                            SecurityStamp = "9f26d89a-006f-459b-a655-7f8dd3892431",
                             TwoFactorEnabled = false,
                             UserName = "user1"
                         },
@@ -274,17 +277,17 @@ namespace webapi.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "563238f3-6e9a-422c-ae7f-9e562636aba3",
-                            DateJoined = new DateTime(2023, 9, 23, 17, 51, 48, 297, DateTimeKind.Utc).AddTicks(7087),
+                            ConcurrencyStamp = "dba33f1c-d4e4-4662-8467-a952e5b8b203",
+                            DateJoined = new DateTime(2023, 9, 23, 17, 41, 24, 489, DateTimeKind.Utc).AddTicks(2371),
                             DateOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user2@test.ca",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "USER2@TEST.CA",
                             NormalizedUserName = "USER2",
-                            PasswordHash = "AQAAAAIAAYagAAAAEByGvfTJx+7IIItGZG+M4p2uhYLVQhFNigWGHL2lqBol1cl9pUxw8yY9qvSmRQXuKg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEApGlNFuCgvWtUKaCMX9vBQSIVVJDV+fuEcxfAcqbqprbRSqnmPQ8PQQLv5WtpTd/A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "69b014e7-3303-4362-ae01-cb7a937ca0aa",
+                            SecurityStamp = "eddfa61c-0315-47df-b9bb-4bdb182d4425",
                             TwoFactorEnabled = false,
                             UserName = "user2"
                         },
@@ -292,17 +295,17 @@ namespace webapi.Migrations
                         {
                             Id = "3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "097aeb1b-9152-4785-8cd6-7ebf1fb79fc9",
-                            DateJoined = new DateTime(2023, 9, 23, 17, 51, 48, 455, DateTimeKind.Utc).AddTicks(6124),
+                            ConcurrencyStamp = "6be36fe6-3c88-4d26-b3d4-34c85fddacb6",
+                            DateJoined = new DateTime(2023, 9, 23, 17, 41, 24, 639, DateTimeKind.Utc).AddTicks(2679),
                             DateOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user3@test.ca",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "USER3@TEST.CA",
                             NormalizedUserName = "USER3",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAHGrvNgNslFj3+XTyKc7EXKHcNE9LjvihHGlMtVyCCl/gRZn0PO+3ZFkbX2YHY1Ng==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEES55F1MxlIbJBwGGm3bi5FmMtL5wRXa95G2A45UepKOfEUbQclXGB+5kvWqupKmRw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b0806fe4-2d83-49b5-bd8e-515a4b85287f",
+                            SecurityStamp = "3833b5df-ac0a-493d-937d-441823887572",
                             TwoFactorEnabled = false,
                             UserName = "user3"
                         },
@@ -310,17 +313,17 @@ namespace webapi.Migrations
                         {
                             Id = "4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "91c5b935-b11c-4abc-acf8-5bbf657374bb",
-                            DateJoined = new DateTime(2023, 9, 23, 17, 51, 48, 619, DateTimeKind.Utc).AddTicks(1917),
+                            ConcurrencyStamp = "e4a695f4-347e-4cb4-8481-757b529ae2bf",
+                            DateJoined = new DateTime(2023, 9, 23, 17, 41, 24, 784, DateTimeKind.Utc).AddTicks(2213),
                             DateOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user4@test.ca",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "USER4@TEST.CA",
                             NormalizedUserName = "USER4",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHp4Jmgh7FE9FuuqZ6MMf0rms0S6FEjYRLjMv+xDTFhnsqQA6Prw2BG1an+XXd6hBg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAl8YKRmXCEInqhiDgTjHm9HvOIsCCRccj5y6feKPXID63TXBBrGFd1EV7RINtmwcg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ff8b328a-1b5e-4f21-9503-799f3812a519",
+                            SecurityStamp = "e090f09b-0b9c-4cf1-a159-db9edfa43510",
                             TwoFactorEnabled = false,
                             UserName = "user4"
                         },
@@ -328,17 +331,17 @@ namespace webapi.Migrations
                         {
                             Id = "5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "be502600-4a08-4fb4-8005-f09e277148aa",
-                            DateJoined = new DateTime(2023, 9, 23, 17, 51, 48, 751, DateTimeKind.Utc).AddTicks(9544),
+                            ConcurrencyStamp = "1729cbb0-96a8-4423-a5c1-e12a119749f4",
+                            DateJoined = new DateTime(2023, 9, 23, 17, 41, 24, 921, DateTimeKind.Utc).AddTicks(1675),
                             DateOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user5@test.ca",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "USER5@TEST.CA",
                             NormalizedUserName = "USER5",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKR7g7/LLdvpDGYT5V8tzGIxpoz38SCNHXnnp2/9iF5u7WVXISaH0m+1LGV3dMwwQQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEA1e9xcR12zUPVwo2ss0WK8QBwZ2mbFTSNd4c+/uTYYqWYy/YXNcvc3WC+hMe6qCyA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b1679f61-0ee1-4b7b-8fa6-3498ea017da9",
+                            SecurityStamp = "9a3b6187-48bc-484a-a49f-d911f2f9ee63",
                             TwoFactorEnabled = false,
                             UserName = "user5"
                         });

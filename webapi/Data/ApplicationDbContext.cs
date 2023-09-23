@@ -23,7 +23,12 @@ namespace webapi.Data
             modelBuilder.Entity<RestaurantModel>()
                 .HasOne(r => r.Creator)
                 .WithMany(u => u.CreatedRestaurants)
-                .HasForeignKey(r => r.CreatorId);
+                .HasForeignKey(r => r.CreatorId);            
+            
+            modelBuilder.Entity<RestaurantModel>()
+                .HasMany(r => r.MealRequests)
+                .WithOne(mr => mr.Restaurant)
+                .HasForeignKey(mr => mr.RestaurantId);
 
             modelBuilder.Entity<MealRequestModel>()
                 .HasOne(m => m.Creator)

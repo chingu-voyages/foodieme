@@ -36,8 +36,27 @@ namespace webapi.Services
           }
             var restaurantModel = await context.Restaurants
                 .Include(r => r.Creator)
+                .Include(r => r.MealRequests)
                 .FirstOrDefaultAsync(q =>  q.Id == id);
             var restaurantVM = mapper.Map<RestaurantVM>(restaurantModel);
+
+            if (restaurantVM == null)
+            {
+                return null;
+            }
+
+            return restaurantVM;
+        }
+        public async Task<MealRequestVM?> GetRestaurantMealRequests(int id)
+        {
+             if (context.Restaurants == null)
+          {
+              return null;
+          }
+            var restaurantMealRequests = await context.MealRequests
+                .Include(r => r.Restaurant)
+                .FirstOrDefaultAsync(mr =>  mr.Restaurant.Id == id);
+            var restaurantVM = mapper.Map<MealRequestVM>(restaurantMealRequests);
 
             if (restaurantVM == null)
             {
