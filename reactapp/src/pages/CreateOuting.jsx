@@ -24,7 +24,7 @@ const CreateOuting = () => {
     const timeStamp = convertToTimestamp(date + " " + time);
 
     try {
-      const res = axios.post(
+      const res = await axios.post(
         `${baseUrl}/api/MealRequests`,
         {
           CreaterId: user.sub,
