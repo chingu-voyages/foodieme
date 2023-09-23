@@ -17,7 +17,6 @@ const ViewRestaurant = () => {
         const res = await axios.get(`${baseUrl}/api/Restaurants/${id}`, {
           headers: headers,
         });
-        console.log(res.data);
         setRestaurantData(res.data);
       } catch (err) {
         console.log(err);
@@ -40,8 +39,11 @@ const ViewRestaurant = () => {
     <div className="text-center">
       <SideDrawer />
       <h1 className="text-4xl m-5">{restaurantData?.Name}</h1>
-      <div className="w-2/3 mx-auto max-w-[600px]">
-        <img src={getImage(restaurantData.Style)}></img>
+      <div>
+        <img
+          className="w-2/3 mx-auto max-w-[500px] m-10"
+          src={getImage(restaurantData.Style)}
+        ></img>
       </div>
       <h2 className="text-xl m-5">{restaurantData?.Address}</h2>
 

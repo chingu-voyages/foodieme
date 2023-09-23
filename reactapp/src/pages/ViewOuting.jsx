@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import PosterCard from "../components/PosterCard";
 import { UserContext } from "../context/UserContext";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { formatDate, getImage } from "../utils/utils";
 import SideDrawer from "../components/SideDrawer";
 import axios from "axios";
@@ -10,16 +10,21 @@ import { baseUrl } from "../constant";
 const ViewOuting = () => {
   const { user, headers } = useContext(UserContext);
   const [outing, setOuting] = useState(null);
+  const [isFull, setIsFull] = useState(false);
   const { id } = useParams();
+  const navigate = useNavigate();
   const [restaurants, setRestaurants] = useState([]);
   const handleJoinClick = () => {
     const joinOuting = async () => {
       try {
-        console.log(headers);
-        const res = axios.patch(`${baseUrl}/api/MealRequests/${id}/join`, {
-          headers: headers,
-        });
-        setRestaurants(res.data);
+        const res = await axios.patch(
+          `${baseUrl}/api/MealRequests/${id}/join`,
+          null,
+          {
+            headers: headers,
+          }
+        );
+        navigate("/dashboard");
       } catch (err) {
         console.log(err);
       }
@@ -33,8 +38,11 @@ const ViewOuting = () => {
           const res = await axios.get(`${baseUrl}/api/MealRequests/${id}`, {
             headers: headers,
           });
-          console.log(res.data);
-          setOuting(res.data);
+          const data = res.data;
+          if (data.CompanionsId.length === data.NumberOfPeople) {
+            setIsFull(true);
+          }
+          setOuting(data);
         } catch (err) {
           console.log(err);
         }
@@ -68,8 +76,11 @@ const ViewOuting = () => {
           {outing?.Restaurant.Name}
         </Link>
       </h3>
-      <div className="w-2/3 mx-auto max-w-[600px]">
-        <img src={getImage(`${outing?.Restaurant.Style}`)}></img>
+      <div>
+        <img
+          className="w-2/3 mx-auto max-w-[500px]"
+          src={getImage(`${outing?.Restaurant.Style}`)}
+        ></img>
       </div>
       <div className="text-center mt-5 mb-5">
         <h3>
@@ -86,13 +97,17 @@ const ViewOuting = () => {
         </h3>
       </div>
       <div className="flex items-center justify-center">
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="button"
-          onClick={handleJoinClick}
-        >
-          I'd like to join {outing?.Creator.UserName}
-        </button>
+        {isFull ? (
+          <h1 className="text-green-900 text-2xl italic">Full</h1>
+        ) : (
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button"
+            onClick={handleJoinClick}
+          >
+            I'd like to join {outing?.Creator.UserName}
+          </button>
+        )}
       </div>
     </div>
   );

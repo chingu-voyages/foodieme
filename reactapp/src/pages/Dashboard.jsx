@@ -7,70 +7,6 @@ import UpcomingOutingCard from "../components/UpcomingOutingCard";
 import axios from "axios";
 import { baseUrl } from "../constant";
 
-const sampleData = [
-  {
-    poster: {
-      username: "Bob",
-      image: "imagePath",
-      description: "I would like to try new cuisines!!",
-    },
-    restaurant: {
-      name: "Tornado Ramen",
-      address: "1234 Address St. Address, CA 11111",
-    },
-    date: "2023-08-17",
-    time: "12:30 pm",
-    accompany: 3,
-  },
-  {
-    poster: {
-      username: "Sam",
-      image: "imagePath",
-      description: "I would like to try new cuisines!!",
-    },
-    restaurant: {
-      name: "Steak House",
-      address: "45 Spence St. Address, CA 11111",
-    },
-    date: "2023-08-18",
-    time: "12:30 pm",
-    accompany: 5,
-  },
-];
-
-const yourOutings = [
-  {
-    poster: {
-      username: "me",
-      image: "imagePath",
-      description: "I would like to try new cuisines!!",
-    },
-    restaurant: {
-      name: "Crane DC",
-      address: "1234 Address St. Address, CA 11111",
-    },
-    date: "2023-08-20",
-    time: "12:30 pm",
-    joined: 2,
-    accompany: 3,
-  },
-  {
-    poster: {
-      username: "Bob",
-      image: "imagePath",
-      description: "I would like to try new cuisines!!",
-    },
-    restaurant: {
-      name: "Milk & Honey",
-      address: "1234 Address St. Address, CA 11111",
-    },
-    date: "2023-08-20",
-    time: "11:00 am",
-    joined: 1,
-    accompany: 4,
-  },
-];
-
 const Dashboard = () => {
   const navigate = useNavigate();
   const { user, headers } = useContext(UserContext);
@@ -83,7 +19,6 @@ const Dashboard = () => {
           const response = await axios.get(`${baseUrl}/api/mealrequests`, {
             headers: headers,
           });
-
           // sort out outings
           const yourOutings = [];
           const otherOutings = [];
@@ -91,7 +26,7 @@ const Dashboard = () => {
             if (outing.CreatorId === user.sub) {
               outing["isOwn"] = true;
               yourOutings.push(outing);
-            } else if (outing.CompanionsId.indexOf() !== -1) {
+            } else if (outing.CompanionsId.indexOf(user.sub) !== -1) {
               outing["isOwn"] = false;
               yourOutings.push(outing);
             } else {

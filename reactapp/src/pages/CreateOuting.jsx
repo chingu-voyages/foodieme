@@ -23,7 +23,6 @@ const CreateOuting = () => {
     const time = `${selectedHour}:${minute} ${selectedAmPm}`;
     const timeStamp = convertToTimestamp(date + " " + time);
 
-    console.log(selectedRestaurant, timeStamp, accompany, description);
     try {
       const res = axios.post(
         `${baseUrl}/api/MealRequests`,
@@ -51,7 +50,6 @@ const CreateOuting = () => {
         const res = await axios.get(`${baseUrl}/api/Restaurants`, {
           headers: headers,
         });
-        console.log(res.data);
         setRestaurants(res.data);
       } catch (err) {
         console.log(err);

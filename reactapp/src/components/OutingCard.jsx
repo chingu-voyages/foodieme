@@ -28,7 +28,7 @@ const OutingCard = ({ outing }) => {
           type="submit"
           onClick={moveToViewOuting}
         >
-          Join
+          View
         </button>
       </div>
     </div>
