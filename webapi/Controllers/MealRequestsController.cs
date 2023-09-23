@@ -116,6 +116,7 @@ namespace webapi.Controllers
             {
                 return Unauthorized();
             }
+            await mealRequestService.DeleteMealRequest(id, currentUserId);
             return Ok("Deleted");
         }
 

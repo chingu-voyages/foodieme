@@ -143,6 +143,10 @@ namespace webapi.Services
             {
                 return null;
             }
+            if (mealRequestModel.Creator.Id == userId)
+            {
+                throw new Exception("Can't add Creator to Companions");
+            }
             if (mealRequestModel.Companions!.Any(companion => companion.Id == currentUser.Id))
             {
                 Console.WriteLine($"removing companion");
@@ -201,8 +205,16 @@ namespace webapi.Services
             {
                 return false;
             }
-
-            return true;
+            try
+            {
+                await DeleteAsync(id);
+                return true;
+            } catch (Exception ex)
+            {
+                Console.WriteLine("Error Deleting MR");
+                Console.WriteLine(ex);
+                return false;
+            }
         }
     }
 }
