@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { formatDate } from "../utils/utils";
 import { UserContext } from "../context/UserContext";
 import { baseUrl } from "../constant";
@@ -6,6 +6,7 @@ import axios from "axios";
 
 const UpcomingOutingCard = ({ outing }) => {
   const { headers } = useContext(UserContext);
+  const [isDeleted, setIsDeleted] = useState(false);
   const handleDelete = () => {
     const deleteOuting = async () => {
       try {
@@ -13,14 +14,20 @@ const UpcomingOutingCard = ({ outing }) => {
           headers,
         });
         console.log(outing.Id + " was deleted");
+        setIsDeleted(true);
       } catch (err) {
         console.log(err);
       }
     };
-    deleteOuting();
+    if (window.confirm("Do you want to delete the outing?")) {
+      deleteOuting();
+    }
   };
 
   const isMyOuting = outing.isOwn;
+  if (isDeleted) {
+    return null;
+  }
   return (
     <div className="bg-white shadow-md rounded text-left w-2/3 px-8 pt-6 pb-6 mb-4 mx-auto gap-5">
       <h1>
