@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { baseUrl } from "../constant";
 import axios from "axios";
+import jwt from "jwt-decode";
 
 const Singup = () => {
   const [username, setUsername] = useState("");
@@ -29,9 +30,16 @@ const Singup = () => {
         LastName: "----",
         DateOfBirth: "2023-09-18T14:08:16.782Z",
       });
-      console.log(res.data);
-      // just keep username and id here??
-      login(res.data);
+      // might ask to change to give me token on res if we have time
+      const res2 = await axios.post(`${baseUrl}/api/Auth/login`, {
+        email,
+        password,
+      });
+      const token = res2.data.token;
+      const user = jwt(token);
+
+      login(user, token);
+
       navigation("/dashboard");
     } catch (error) {
       console.log(error);
