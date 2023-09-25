@@ -104,17 +104,12 @@ namespace webapi.Controllers
         public ActionResult<string> GetUserName()
         {
             var username = User.FindFirst("name").Value!;
-            //Console.WriteLine($"username {username}");
 
             var userId = User.FindFirst("sub").Value!;
-            //Console.WriteLine($"userId {userId}");
 
             var userEmailClaim = User.FindFirst("email");
-            //var userEmail = User.FindFirst("email").Value;
-            //Console.WriteLine($"userEmailClaim {userEmailClaim}");
 
             var userEmail = User.FindFirst(ClaimTypes.Email).Value;
-            //Console.WriteLine($"userEmail {userEmail}");
 
             return Ok(new
             {

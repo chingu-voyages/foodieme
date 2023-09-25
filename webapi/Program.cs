@@ -43,30 +43,9 @@ builder.Services.AddSwaggerGen(options =>
         //Scheme = JwtBearerDefaults.AuthenticationScheme,
         Scheme = "Bearer"
     });
-    //options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    //{
-    //    {
-    //        new OpenApiSecurityScheme
-    //        {
-    //            Reference = new OpenApiReference
-    //            {
-    //                Type=ReferenceType.SecurityScheme,
-    //                Id="Bearer"
-    //            }
-    //        },
-    //        new string[]{}
-    //    }
-    //});
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
-
-//IConfiguration configuration = new ConfigurationBuilder()
-//    .SetBasePath(Directory.GetCurrentDirectory())
-//    .AddJsonFile("appsettings.json", optional: true)
-//    .AddUserSecrets<Program>() // Load user secrets
-//    .AddEnvironmentVariables()
-//    .Build();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -75,7 +54,6 @@ builder.Services.AddIdentity<UserModel, IdentityRole>(options =>
 options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
-//.addjwt
 
 // Configure JWT authentication if needed
 // Add Authentication and JwtBearer middleware to add to Header

@@ -53,10 +53,12 @@ namespace webapi.Controllers
             return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
         }
 
+        //TODO: Delete user for admin
         // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Policy = "AdminOnly")]
         public void Delete(int id)
         {
+
         }
     }
 }
