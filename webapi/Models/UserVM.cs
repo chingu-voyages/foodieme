@@ -14,7 +14,7 @@ namespace webapi.Models
         public string? Picture { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DateTime DateJoined { get; set; }
-        public List<MealRequestModel>? CreatedMealRequests { get; set; } = new();
-        public List<RestaurantModel>? CreatedRestaurants { get; set; } = new();
+        public List<MealRequestVM>? CreatedMealRequests { get; set; } = new();
+        public List<RestaurantVM>? CreatedRestaurants { get; set; } = new();
     }
 }

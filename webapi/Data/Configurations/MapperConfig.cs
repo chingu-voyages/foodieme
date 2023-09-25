@@ -10,29 +10,21 @@ namespace webapi.Data.Configurations
 
         public MapperConfig()
         {
-            //this.context = context;
             //Make sure the mappers check if the restaurant exists
-            CreateMap<MealRequestCreateVM, MealRequestModel>()
-                // Mapper expects an Expression body (x => x.someProp) inside MapFrom instead of a statement body (x => {})
-                //.ForMember(dest => dest.Restaurant, opt => opt.MapFrom(src =>
-                //{
-                //    var restaurant = context.Restaurants.FirstOrDefault(r => r.Id == src.RestaurantId);
-                //    //if (restaurant == null)
-                //    //{
-                //    //    return null;
-                //    //}
-                //    return restaurant;
-                //}))
-                //.ForMember(dest => dest.Restaurant, opt =>
-                //{
-                //    opt.Condition(src => src.RestaurantId != 0);
-                //    opt.MapFrom(src => context!.Restaurants.FirstOrDefault(r => r.Id == src.RestaurantId));
-                //})
-                .ReverseMap();
+            CreateMap<MealRequestCreateVM, MealRequestModel>().ReverseMap();
             CreateMap<RestaurantModel, RestaurantVM>().ReverseMap();
             CreateMap<RestaurantCreateVM, RestaurantModel>().ReverseMap();
-            CreateMap<UserModel, UserVM>().ReverseMap();
             CreateMap<UserModel, CreatorVM>().ReverseMap();
+            CreateMap<UserModel, UserVM>()
+                //seems to map automatically
+                //.ForMember(dest => dest.CreatedMealRequests, opt => opt.MapFrom(src => src.CreatedMealRequests))
+                //.ForMember(dest => dest.CreatedRestaurants, opt => opt.MapFrom(src => src.CreatedRestaurants))
+                //.AfterMap((src, dest, context) =>
+                //{
+                //    dest.CreatedMealRequests = context.Mapper.Map<List<MealRequestVM>>(src.CreatedMealRequests);
+                //    dest.CreatedRestaurants = context.Mapper.Map<List<RestaurantVM>>(src.CreatedRestaurants);
+                //})
+                .ReverseMap();
             CreateMap<RestaurantModel, RestaurantVM>()
                 .ForMember(dest => dest.Creator, opt => opt.MapFrom(src => src.Creator));
             CreateMap<MealRequestModel, MealRequestVM>()

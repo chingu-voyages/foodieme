@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using webapi.Interfaces;
+using webapi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,43 +12,53 @@ namespace webapi.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly IUserService userServices;
+
+        public UsersController(IUserService userServices)
+        {
+            this.userServices = userServices;
+        }
         // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet, Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> GetAll()
         {
-            return new string[] { "value1", "value2" };
+            var allUsers = await userServices.GetAllUsers();
+            return Ok(allUsers);
         }
 
-        // GET api/<UsersController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GET api/<UsersController>/dfjkdhskhjkdh
+        [HttpGet("{id}"), Authorize]
+        public async Task<IActionResult> Get(string id)
         {
-            return "value";
-        }
+            var user = await userServices.GetUser(id);
+            return Ok(user);
 
-        // POST api/<UsersController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        } 
+        }
         
-        // POST api/<UsersController>/login
-        [HttpPost]
-        [Route("register")]
-        public void Register([FromBody] string value)
-        {
-        }
-
         // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{id}"), Authorize]
+        public async Task<IActionResult> EditUserInfo([FromRoute] string id, [FromBody] UserVM model)
         {
+            var currentUserId = User.FindFirst("sub")!.Value;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid Form");
+            }
+            //only allow own user to edit
+            if (currentUserId != id)
+            {
+                return Unauthorized();
+            }
+            var user = await userServices.UpdateUser(id, model);
+            return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
         }
 
+        //TODO: Delete user for admin
         // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Policy = "AdminOnly")]
         public void Delete(int id)
         {
+
         }
     }
 }

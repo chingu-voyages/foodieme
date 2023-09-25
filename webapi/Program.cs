@@ -13,6 +13,7 @@ using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Swashbuckle.AspNetCore.Filters;
+using webapi.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericServices<>))
 builder.Services.AddScoped<IRestaurantService, RestaurantServices>();
 builder.Services.AddScoped<IAuthService, AuthServices>();
 builder.Services.AddScoped<IMealRequestService, MealRequestServices>();
+builder.Services.AddScoped<IUserService, UsersServices>();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
@@ -41,30 +43,9 @@ builder.Services.AddSwaggerGen(options =>
         //Scheme = JwtBearerDefaults.AuthenticationScheme,
         Scheme = "Bearer"
     });
-    //options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    //{
-    //    {
-    //        new OpenApiSecurityScheme
-    //        {
-    //            Reference = new OpenApiReference
-    //            {
-    //                Type=ReferenceType.SecurityScheme,
-    //                Id="Bearer"
-    //            }
-    //        },
-    //        new string[]{}
-    //    }
-    //});
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
-
-//IConfiguration configuration = new ConfigurationBuilder()
-//    .SetBasePath(Directory.GetCurrentDirectory())
-//    .AddJsonFile("appsettings.json", optional: true)
-//    .AddUserSecrets<Program>() // Load user secrets
-//    .AddEnvironmentVariables()
-//    .Build();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -73,7 +54,6 @@ builder.Services.AddIdentity<UserModel, IdentityRole>(options =>
 options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
-//.addjwt
 
 // Configure JWT authentication if needed
 // Add Authentication and JwtBearer middleware to add to Header
@@ -111,6 +91,14 @@ builder.Services
     });
 
 var supabaseUrl = builder.Configuration["Supabase:URL"];
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+    {
+        policy.RequireClaim("sub", Admin.AdminUserId);
+    });
+});
 
 
 //JSON Serializer

@@ -10,5 +10,6 @@
         public string Budget { get; set; }
         public string Style { get; set; }
         public string Address { get; set; }
+        public List<MealRequestVM> MealRequests { get; set; }
     }
 }

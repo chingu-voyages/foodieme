@@ -66,10 +66,6 @@ namespace webapi.Services
         {
             string email = model.email;
             string password = model.password;
-            //System.Diagnostics.Debug.WriteLine($"Login {email}");
-            //System.Diagnostics.Debug.WriteLine($"Password {password}");
-            //Console.WriteLine($"Login {email}");
-            //Console.WriteLine($"Password {password}");
             var user = await _context.Users.FirstOrDefaultAsync(user => email == user.Email);
             if (user == null)
             {
@@ -82,17 +78,17 @@ namespace webapi.Services
             }
             string token = CreateToken(user);
 
-            return new LoginResponse { token= token, user = user};
+            return new LoginResponse { token = token, user = user };
         }
 
         public string LogoutUser()
         {
             // Create a claim with an expired expiration time
             var claims = new List<Claim>
-    {
-        new Claim("sub", "logout"),
-        new Claim(JwtRegisteredClaimNames.Exp, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString())
-    };
+                {
+                    new Claim("sub", "logout"),
+                    new Claim(JwtRegisteredClaimNames.Exp, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString())
+                };
 
             // Key used to create the JWT
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));

@@ -61,6 +61,23 @@ namespace webapi.Controllers
             }
 
             return restaurantVM;
+        }     
+        // GET: api/Restaurants/5/mealrequests
+        [HttpGet("{id}/mealrequests"), Authorize]
+        public async Task<ActionResult<MealRequestVM>> GetRestaurantMealRequests(int id)
+        {
+            if (_context.Restaurants == null)
+            {
+                return NotFound();
+            }
+            var restaurantVM = await restaurantServices.GetRestaurantMealRequests(id);
+
+            if (restaurantVM == null)
+            {
+                return NotFound();
+            }
+
+            return restaurantVM;
         }
 
         // PUT: api/Restaurants/5
