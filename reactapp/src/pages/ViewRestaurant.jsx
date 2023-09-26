@@ -17,6 +17,7 @@ const ViewRestaurant = () => {
         const res = await axios.get(`${baseUrl}/api/Restaurants/${id}`, {
           headers: headers,
         });
+        console.log(res.data);
         setRestaurantData(res.data);
       } catch (err) {
         console.log(err);
