@@ -37,6 +37,7 @@ namespace webapi.Services
             var restaurantModel = await context.Restaurants
                 .Include(r => r.Creator)
                 .Include(r => r.MealRequests)
+                    .ThenInclude(mr => mr.Creator)
                 .FirstOrDefaultAsync(q =>  q.Id == id);
             var restaurantVM = mapper.Map<RestaurantVM>(restaurantModel);
 
