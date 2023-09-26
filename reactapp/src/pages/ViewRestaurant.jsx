@@ -43,7 +43,7 @@ const ViewRestaurant = () => {
       <div>
         <img
           className="w-2/3 mx-auto max-w-[500px] m-10"
-          src={getImage(restaurantData.Style)}
+          src={restaurantData.Style && getImage(restaurantData.Style)}
         ></img>
       </div>
       <h2 className="text-xl m-5">{restaurantData?.Address}</h2>

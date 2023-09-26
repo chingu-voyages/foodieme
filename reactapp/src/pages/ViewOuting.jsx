@@ -79,7 +79,9 @@ const ViewOuting = () => {
       <div>
         <img
           className="w-2/3 mx-auto max-w-[500px]"
-          src={getImage(`${outing?.Restaurant.Style}`)}
+          src={
+            outing?.Restaurant.Style && getImage(`${outing?.Restaurant.Style}`)
+          }
         ></img>
       </div>
       <div className="text-center mt-5 mb-5">
