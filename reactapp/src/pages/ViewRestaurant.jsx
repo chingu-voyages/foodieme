@@ -11,6 +11,7 @@ const ViewRestaurant = () => {
   const { user, headers } = useContext(UserContext);
   const { id } = useParams();
   const [restaurantData, setRestaurantData] = useState([]);
+  const [outings, setOutings] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -18,6 +19,7 @@ const ViewRestaurant = () => {
           headers: headers,
         });
         setRestaurantData(res.data);
+        setOutings(res.data.MealRequests);
       } catch (err) {
         console.log(err);
       }
@@ -42,19 +44,18 @@ const ViewRestaurant = () => {
       <div>
         <img
           className="w-2/3 mx-auto max-w-[500px] m-10"
-          src={getImage(restaurantData.Style)}
+          src={restaurantData.Style && getImage(restaurantData.Style)}
         ></img>
       </div>
       <h2 className="text-xl m-5">{restaurantData?.Address}</h2>
 
       <div>
         <h2 className="text-2xl text-left text-bold m-5">Who's eating here?</h2>
-        {/* ask the restaurant data include outing data */}
-        {/* <div>
-          {sampleData.outings.map((outing, index) => {
+        <div>
+          {outings.map((outing, index) => {
             return <OutingCard key={index} outing={outing} />;
           })}
-        </div> */}
+        </div>
       </div>
     </div>
   );
