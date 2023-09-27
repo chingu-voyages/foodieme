@@ -11,14 +11,15 @@ const ViewRestaurant = () => {
   const { user, headers } = useContext(UserContext);
   const { id } = useParams();
   const [restaurantData, setRestaurantData] = useState([]);
+  const [outings, setOutings] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`${baseUrl}/api/Restaurants/${id}`, {
           headers: headers,
         });
-        console.log(res.data);
         setRestaurantData(res.data);
+        setOutings(res.data.MealRequests);
       } catch (err) {
         console.log(err);
       }
@@ -50,12 +51,11 @@ const ViewRestaurant = () => {
 
       <div>
         <h2 className="text-2xl text-left text-bold m-5">Who's eating here?</h2>
-        {/* ask the restaurant data include outing data */}
-        {/* <div>
-          {sampleData.outings.map((outing, index) => {
+        <div>
+          {outings.map((outing, index) => {
             return <OutingCard key={index} outing={outing} />;
           })}
-        </div> */}
+        </div>
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import { baseUrl } from "../constant";
 const ViewOuting = () => {
   const { user, headers } = useContext(UserContext);
   const [outing, setOuting] = useState(null);
+  const [isYourOuting, setIsYourOuting] = useState(false);
   const [isFull, setIsFull] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -39,6 +40,10 @@ const ViewOuting = () => {
             headers: headers,
           });
           const data = res.data;
+          console.log(data.CreatorId, user.sub);
+          if (data.CreateroId === user.sub) {
+            setIsYourOuting(true);
+          }
           if (data.CompanionsId.length === data.NumberOfPeople) {
             setIsFull(true);
           }
@@ -99,7 +104,7 @@ const ViewOuting = () => {
         </h3>
       </div>
       <div className="flex items-center justify-center">
-        {isFull ? (
+        {isYourOuting ? null : isFull ? (
           <h1 className="text-green-900 text-2xl italic">Full</h1>
         ) : (
           <button

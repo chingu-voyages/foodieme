@@ -12,7 +12,7 @@ const OutingCard = ({ outing }) => {
       <h1>
         <span className="font-bold">{outing.CreatorName} </span>
         wants to eat at{" "}
-        <span className="font-bold">{outing.Restaurant.Name}</span>
+        <span className="font-bold">{outing.Restaurant?.Name}</span>
       </h1>
       <h1>
         On <span className="font-bold">{formatDate(outing.DateTime)} </span>
